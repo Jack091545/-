@@ -1,0 +1,6 @@
+"main.obj",
+"Display.obj",
+"DS1302.obj",
+"UART.obj",
+"Timer.obj" 
+TO "Timeless" 

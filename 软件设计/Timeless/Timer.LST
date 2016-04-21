@@ -1,0 +1,45 @@
+C51 COMPILER V9.01   TIMER                                                                 04/21/2016 23:01:39 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE TIMER
+OBJECT MODULE PLACED IN Timer.OBJ
+COMPILER INVOKED BY: C:\D\Software\KeilC51\C51\BIN\C51.EXE Timer.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "stc12c5a60s2.h"
+   2          #include "DS1302.h"
+   3          #include <stdio.h>
+   4          
+   5          unsigned char Timer_1000ms = 0;
+   6          unsigned int nian,yue,ri,shi,fen,miao,zhou; //存储显示值的全局变量
+   7          
+   8          void Timer0_Init(void)
+   9          {                                                                                                               
+  10   1              TMOD |= 0x01; //16位定时器
+  11   1          TH0=(65536-50000)/256;
+  12   1          TL0=(65536-50000)%256;
+  13   1          ET0 = 1; //允许T0中断
+  14   1      //    EA  = 1; //开放中断
+  15   1          TR0 = 1;
+  16   1      }
+  17          
+  18          void Timer_SER(void) interrupt 1
+  19          {
+  20   1          TH0=(65536-50000)/256;
+  21   1          TL0=(65536-50000)%256;
+  22   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     21    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     15    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

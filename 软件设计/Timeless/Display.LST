@@ -1,0 +1,127 @@
+C51 COMPILER V9.01   DISPLAY                                                               04/21/2016 23:01:39 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE DISPLAY
+OBJECT MODULE PLACED IN Display.OBJ
+COMPILER INVOKED BY: C:\D\Software\KeilC51\C51\BIN\C51.EXE Display.c BROWSE DEBUG OBJECTEXTEND
+
+line level    source
+
+   1          #include "stc12c5a60s2.h"
+   2          
+   3          unsigned char  segout[8]={0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80}; //8列
+   4          /*------------------------------------------------
+   5                          硬件端口定义
+   6          ------------------------------------------------*/
+   7          
+   8          sbit LATCH = P2^6; 
+   9          sbit SRCLK= P2^5;
+  10          sbit SER  = P2^7;
+  11          
+  12          //行信号控制
+  13          sbit LATCH_B = P2^3;
+  14          sbit SRCLK_B= P2^4;
+  15          sbit SER_B= P2^2;
+  16          
+  17          /*------------------------------------------------
+  18           uS延时函数，含有输入参数 unsigned char t，无返回值
+  19           unsigned char 是定义无符号字符变量，其值的范围是
+  20           0~255 这里使用晶振12M，精确延时请使用汇编,大致延时
+  21           长度如下 T=tx2+5 uS 
+  22          ------------------------------------------------*/
+  23          void DelayUs2x(unsigned char t)
+  24          {   
+  25   1       while(--t);
+  26   1      }
+  27          /*------------------------------------------------
+  28           mS延时函数，含有输入参数 unsigned char t，无返回值
+  29           unsigned char 是定义无符号字符变量，其值的范围是
+  30           0~255 这里使用晶振12M，精确延时请使用汇编
+  31          ------------------------------------------------*/
+  32          void DelayMs(unsigned char t)
+  33          {
+  34   1           
+  35   1       while(t--)
+  36   1       {
+  37   2           //大致延时1mS
+  38   2           DelayUs2x(245);
+  39   2               DelayUs2x(245);
+  40   2       }
+  41   1      }
+  42          /*------------------------------------------------
+  43                          发送字节程序
+  44          ------------------------------------------------*/
+  45          void SendByte(unsigned char dat)
+  46          {    
+  47   1        unsigned char i; 
+  48   1              
+  49   1              for(i=0;i<8;i++)
+  50   1              {
+  51   2                      SRCLK_B=0;
+  52   2                      SER_B=dat&0x80;
+  53   2                      dat<<=1;
+  54   2                      SRCLK_B=1;
+  55   2              }
+C51 COMPILER V9.01   DISPLAY                                                               04/21/2016 23:01:39 PAGE 2   
+
+  56   1              
+  57   1               
+  58   1      }
+  59          /*------------------------------------------------
+  60                          发送双字节序
+  61               595级联，n个595，就需要发送n字节后锁存
+  62          ------------------------------------------------*/
+  63          void Send4Byte(unsigned char dat1,unsigned char dat2,unsigned char dat3,unsigned char dat4)
+  64          {    
+  65   1         SendByte(dat1);
+  66   1         SendByte(dat2);
+  67   1         SendByte(dat3);
+  68   1         SendByte(dat4);
+  69   1         LATCH_B=0;
+  70   1         LATCH_B=1;     
+  71   1      }
+  72          
+  73          /*------------------------------------------------
+  74                  行信号
+  75          ------------------------------------------------*/
+  76          void SendSeg(unsigned char dat)
+  77          {    
+  78   1      unsigned char i; 
+  79   1              
+  80   1         for(i=0;i<8;i++)  //发送8行对应的数据
+  81   1              {
+  82   2                      SRCLK=0;
+  83   2                      SER=dat&0x80;
+  84   2                      dat<<=1;
+  85   2                      SRCLK=1;
+  86   2              }
+  87   1              LATCH=0;    //锁存
+  88   1              LATCH=1;
+  89   1      }
+  90          
+  91          void Send_Data(unsigned char dat1[],unsigned char dat2[],unsigned char dat3[],unsigned char dat4[])
+  92          {
+  93   1              unsigned char i = 0;
+  94   1              for(i = 0;i < 8;i++)
+  95   1              {
+  96   2                      SendSeg(~segout[i]); //0xfd
+  97   2                      Send4Byte(dat4[i],dat3[i],dat2[i],dat1[i]);
+  98   2                      DelayMs(1);
+  99   2                      Send4Byte(0x00,0x00,0x00,0x00);//delay(10); //防止重
+ 100   2                      DelayMs(1);
+ 101   2              }
+ 102   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    214    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      8      17
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

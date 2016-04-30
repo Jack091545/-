@@ -1,42 +1,62 @@
-C51 COMPILER V9.01   TIMER                                                                 04/21/2016 23:01:39 PAGE 1   
+C51 COMPILER V9.01   TIMER                                                                 04/30/2016 21:06:42 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE TIMER
 OBJECT MODULE PLACED IN Timer.OBJ
-COMPILER INVOKED BY: C:\D\Software\KeilC51\C51\BIN\C51.EXE Timer.c BROWSE DEBUG OBJECTEXTEND
+COMPILER INVOKED BY: D:\software\KEILC51\C51\BIN\C51.EXE Timer.c BROWSE DEBUG OBJECTEXTEND
 
 line level    source
 
    1          #include "stc12c5a60s2.h"
    2          #include "DS1302.h"
-   3          #include <stdio.h>
-   4          
-   5          unsigned char Timer_1000ms = 0;
-   6          unsigned int nian,yue,ri,shi,fen,miao,zhou; //存储显示值的全局变量
-   7          
-   8          void Timer0_Init(void)
-   9          {                                                                                                               
-  10   1              TMOD |= 0x01; //16位定时器
-  11   1          TH0=(65536-50000)/256;
-  12   1          TL0=(65536-50000)%256;
-  13   1          ET0 = 1; //允许T0中断
-  14   1      //    EA  = 1; //开放中断
-  15   1          TR0 = 1;
-  16   1      }
-  17          
-  18          void Timer_SER(void) interrupt 1
-  19          {
-  20   1          TH0=(65536-50000)/256;
-  21   1          TL0=(65536-50000)%256;
-  22   1      }
+   3          #include "Data_store.h"
+   4          #include "UART.h"
+   5          #include <stdio.h>
+   6          
+   7          unsigned char Timer_Counter0 = 0; 
+   8          unsigned char Timer_Counter1 = 0; 
+   9          
+  10          
+  11          sbit LED = P1^4;
+  12          
+  13          void Timer_Init(void)
+  14          {                                                                                                               
+  15   1              TMOD |= 0x01; //16位定时器
+  16   1      
+  17   1          TH0 = (65536-50000)/256;
+  18   1          TL0 = (65536-50000)%256;
+  19   1      
+  20   1          ET0 = 1; //允许T0中断
+  21   1          TR0 = 1;
+  22   1      
+  23   1              LED = 1;
+  24   1      }
+  25          
+  26          void Timer0_SER(void) interrupt 1
+  27          {
+  28   1              unsigned char i = 0;
+  29   1          TH0=(65536-50000)/256;
+  30   1          TL0=(65536-50000)%256;
+  31   1              Timer_Counter0++;
+  32   1              Timer_Counter1++;
+  33   1              if(Timer_Counter0 == 20)
+  34   1              {
+  35   2                      Timer_Counter0 = 0;
+  36   2                      LED = !LED;
+  37   2                              SendByte_UART(IAP_ReadByte(0x0010));
+  38   2                              SendByte_UART(IAP_ReadByte(0x0011));
+  39   2              }  
+  40   1              
+  41   1      }
+  42          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     21    ----
+   CODE SIZE        =    115    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =     15    ----
+   DATA SIZE        =      2       1
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

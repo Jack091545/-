@@ -53,4 +53,6 @@ void Ds1302_Read_Time(void)  ;
                 DS1302≥ı ºªØ
 ------------------------------------------------*/
 void Ds1302_Init(void);
+
+void Read_Time_Task(void);
 #endif

@@ -4,7 +4,7 @@
 
 
 
-unsigned char time_buf1[8] = {20,16,4,21,19,29,00,4};//空年月日时分秒周
+unsigned char time_buf1[8] = {20,16,4,30,17,18,00,6};//空年月日时分秒周
 unsigned char time_buf[8] ;                         //空年月日时分秒周
 /*------------------------------------------------
            向DS1302写入一字节数据
@@ -158,6 +158,11 @@ void Ds1302_Init(void)
 	SCK_CLR;			//SCK脚置低
 //	IO_CLR;
     Ds1302_Write_Byte(ds1302_sec_add,0x00);				 
+}
+
+void Read_Time_Task(void)
+{
+	Ds1302_Read_Time();
 }
 
 

@@ -1,124 +1,226 @@
-C51 COMPILER V9.01   DISPLAY                                                               04/21/2016 23:01:39 PAGE 1   
+C51 COMPILER V9.01   DISPLAY                                                               04/30/2016 21:06:41 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE DISPLAY
 OBJECT MODULE PLACED IN Display.OBJ
-COMPILER INVOKED BY: C:\D\Software\KeilC51\C51\BIN\C51.EXE Display.c BROWSE DEBUG OBJECTEXTEND
+COMPILER INVOKED BY: D:\software\KEILC51\C51\BIN\C51.EXE Display.c BROWSE DEBUG OBJECTEXTEND
 
 line level    source
 
    1          #include "stc12c5a60s2.h"
-   2          
-   3          unsigned char  segout[8]={0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80}; //8列
-   4          /*------------------------------------------------
-   5                          硬件端口定义
-   6          ------------------------------------------------*/
-   7          
-   8          sbit LATCH = P2^6; 
-   9          sbit SRCLK= P2^5;
-  10          sbit SER  = P2^7;
-  11          
-  12          //行信号控制
-  13          sbit LATCH_B = P2^3;
-  14          sbit SRCLK_B= P2^4;
-  15          sbit SER_B= P2^2;
+   2          #include "ds1302.h"
+   3          
+   4          unsigned int nian,yue,ri,shi,fen,miao,zhou; //存储显示值的全局变量
+   5          static unsigned char  segout[8]={0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80}; //8列
+   6          unsigned char code number[10][8]={
+   7          {0x00,0x38,0x6C,0x6C,0x6C,0x6C,0x6C,0x38},/*"0",0*/
+   8          
+   9          {0x00,0x18,0x1C,0x18,0x18,0x18,0x18,0x3C},/*"1",1*/
+  10          
+  11          {0x00,0x38,0x6C,0x60,0x30,0x18,0x0C,0x7C},/*"2",2*/
+  12          
+  13          {0x00,0x38,0x6C,0x60,0x38,0x60,0x6C,0x38},/*"3",3*/
+  14          
+  15          {0x00,0x30,0x38,0x38,0x3C,0x3C,0x7C,0x30},/*"4",4*/
   16          
-  17          /*------------------------------------------------
-  18           uS延时函数，含有输入参数 unsigned char t，无返回值
-  19           unsigned char 是定义无符号字符变量，其值的范围是
-  20           0~255 这里使用晶振12M，精确延时请使用汇编,大致延时
-  21           长度如下 T=tx2+5 uS 
-  22          ------------------------------------------------*/
-  23          void DelayUs2x(unsigned char t)
-  24          {   
-  25   1       while(--t);
-  26   1      }
-  27          /*------------------------------------------------
-  28           mS延时函数，含有输入参数 unsigned char t，无返回值
-  29           unsigned char 是定义无符号字符变量，其值的范围是
-  30           0~255 这里使用晶振12M，精确延时请使用汇编
-  31          ------------------------------------------------*/
-  32          void DelayMs(unsigned char t)
-  33          {
-  34   1           
-  35   1       while(t--)
-  36   1       {
-  37   2           //大致延时1mS
-  38   2           DelayUs2x(245);
-  39   2               DelayUs2x(245);
-  40   2       }
-  41   1      }
-  42          /*------------------------------------------------
-  43                          发送字节程序
-  44          ------------------------------------------------*/
-  45          void SendByte(unsigned char dat)
-  46          {    
-  47   1        unsigned char i; 
-  48   1              
-  49   1              for(i=0;i<8;i++)
-  50   1              {
-  51   2                      SRCLK_B=0;
-  52   2                      SER_B=dat&0x80;
-  53   2                      dat<<=1;
-  54   2                      SRCLK_B=1;
-  55   2              }
-C51 COMPILER V9.01   DISPLAY                                                               04/21/2016 23:01:39 PAGE 2   
+  17          {0x00,0x7C,0x0C,0x0C,0x3C,0x60,0x60,0x3C},/*"5",5*/
+  18          
+  19          {0x00,0x38,0x6C,0x0C,0x3C,0x6C,0x6C,0x38},/*"6",6*/
+  20          
+  21          {0x00,0x7C,0x6C,0x60,0x30,0x18,0x18,0x18},/*"7",7*/
+  22          
+  23          {0x00,0x38,0x6C,0x6C,0x38,0x6C,0x6C,0x38},/*"8",8*/
+  24          
+  25          {0x00,0x38,0x6C,0x6C,0x78,0x60,0x6C,0x38}/*"9",9*/
+  26          };
+  27          
+  28          unsigned char code lift_num[10][8]= {
+  29          {0x7C,0xFE,0x82,0xFE,0x7C,0x00,0x00,0x00},/*"0",0*/
+  30          
+  31          {0x00,0x80,0xFE,0xFE,0x84,0x00,0x00,0x00},/*"1",1*/
+  32          
+  33          {0x8C,0x9E,0xB2,0xE6,0xC4,0x00,0x00,0x00},/*"2",2*/
+  34          
+  35          {0x6C,0xFE,0x92,0xD6,0x44,0x00,0x00,0x00},/*"3",3*/
+  36          
+  37          {0x20,0xFE,0xFE,0x24,0x38,0x00,0x00,0x00},/*"4",4*/
+  38          
+  39          {0x62,0xF2,0x92,0x9E,0x9E,0x00,0x00,0x00},/*"5",5*/
+  40          
+  41          {0x64,0xF6,0x92,0xFE,0x7C,0x00,0x00,0x00},/*"6",6*/
+  42          
+  43          {0x0E,0x1E,0xF2,0xE6,0x06,0x00,0x00,0x00},/*"7",7*/
+  44          
+  45          {0x6C,0xFE,0x92,0xFE,0x6C,0x00,0x00,0x00},/*"8",8*/
+  46          
+  47          {0x7C,0xFE,0x92,0xDE,0x4C,0x00,0x00,0x00}/*"9",9*/
+  48          };
+  49          unsigned char code lift_num_dot[10][8] = {
+  50          {0x6c,0x00,0x7C,0xFE,0x82,0xFE,0x7C,0x00},/*"0",0*/
+  51          
+  52          {0x6c,0x00,0x00,0x80,0xFE,0xFE,0x84,0x00},/*"1",0*/
+  53          
+  54          {0x6c,0x00,0x8C,0x9E,0xB2,0xE6,0xC4,0x00},/*"2",2*/
+  55          
+C51 COMPILER V9.01   DISPLAY                                                               04/30/2016 21:06:41 PAGE 2   
 
-  56   1              
-  57   1               
-  58   1      }
-  59          /*------------------------------------------------
-  60                          发送双字节序
-  61               595级联，n个595，就需要发送n字节后锁存
-  62          ------------------------------------------------*/
-  63          void Send4Byte(unsigned char dat1,unsigned char dat2,unsigned char dat3,unsigned char dat4)
-  64          {    
-  65   1         SendByte(dat1);
-  66   1         SendByte(dat2);
-  67   1         SendByte(dat3);
-  68   1         SendByte(dat4);
-  69   1         LATCH_B=0;
-  70   1         LATCH_B=1;     
-  71   1      }
+  56          {0x6c,0x00,0x6C,0xFE,0x92,0xD6,0x44,0x00},/*"3",3*/
+  57          
+  58          {0x6c,0x00,0x20,0xFE,0xFE,0x24,0x38,0x00},/*"4",4*/
+  59          
+  60          {0x6c,0x00,0x62,0xF2,0x92,0x9E,0x9E,0x00},/*"5",5*/
+  61          
+  62          {0x6c,0x00,0x64,0xF6,0x92,0xFE,0x7C,0x00},/*"6",6*/
+  63          
+  64          {0x6c,0x00,0x0E,0x1E,0xF2,0xE6,0x06,0x00},/*"7",7*/
+  65          
+  66          {0x6c,0x00,0x6C,0xFE,0x92,0xFE,0x6C,0x00},/*"8",8*/
+  67          
+  68          {0x6c,0x00,0x7C,0xFE,0x92,0xDE,0x4C,0x00}/*"9",9*/
+  69          };
+  70          unsigned char code right_num_dot[10][8] = {
+  71          {0x00,0x7C,0xFE,0x82,0xFE,0x7C,0x00,0x6c},/*"0",0*/
   72          
-  73          /*------------------------------------------------
-  74                  行信号
-  75          ------------------------------------------------*/
-  76          void SendSeg(unsigned char dat)
-  77          {    
-  78   1      unsigned char i; 
-  79   1              
-  80   1         for(i=0;i<8;i++)  //发送8行对应的数据
-  81   1              {
-  82   2                      SRCLK=0;
-  83   2                      SER=dat&0x80;
-  84   2                      dat<<=1;
-  85   2                      SRCLK=1;
-  86   2              }
-  87   1              LATCH=0;    //锁存
-  88   1              LATCH=1;
-  89   1      }
+  73          {0x00,0x80,0xFE,0xFE,0x84,0x00,0x00,0x6c},/*"1",0*/
+  74          
+  75          {0x00,0x8C,0x9E,0xB2,0xE6,0xC4,0x00,0x6c},/*"2",2*/
+  76          
+  77          {0x00,0x6C,0xFE,0x92,0xD6,0x44,0x00,0x6c},/*"3",3*/
+  78          
+  79          {0x00,0x20,0xFE,0xFE,0x24,0x38,0x00,0x6C},/*"4",4*/
+  80          
+  81          {0x00,0x62,0xF2,0x92,0x9E,0x9E,0x00,0x6c},/*"5",5*/
+  82          
+  83          {0x00,0x64,0xF6,0x92,0xFE,0x7C,0x00,0x6c},/*"6",6*/
+  84          
+  85          {0x00,0x0E,0x1E,0xF2,0xE6,0x06,0x00,0x6c},/*"7",7*/
+  86          
+  87          {0x00,0x6C,0xFE,0x92,0xFE,0x6C,0x00,0x6c},/*"8",8*/
+  88          
+  89          {0x00,0x7C,0xFE,0x92,0xDE,0x4C,0x00,0x6c}/*"9",9*/
   90          
-  91          void Send_Data(unsigned char dat1[],unsigned char dat2[],unsigned char dat3[],unsigned char dat4[])
-  92          {
-  93   1              unsigned char i = 0;
-  94   1              for(i = 0;i < 8;i++)
-  95   1              {
-  96   2                      SendSeg(~segout[i]); //0xfd
-  97   2                      Send4Byte(dat4[i],dat3[i],dat2[i],dat1[i]);
-  98   2                      DelayMs(1);
-  99   2                      Send4Byte(0x00,0x00,0x00,0x00);//delay(10); //防止重
- 100   2                      DelayMs(1);
- 101   2              }
- 102   1      }
+  91          };
+  92          unsigned char code right_num[10][8] = {
+  93          {0x00,0x00,0x00,0x7C,0xFE,0x82,0xFE,0x7C},/*"0",0*/
+  94          
+  95          {0x00,0x00,0x00,0x00,0x80,0xFE,0xFE,0x84},/*"1",1*/
+  96          
+  97          {0x00,0x00,0x00,0x8C,0x9E,0xB2,0xE6,0xC4},/*"2",2*/
+  98          
+  99          {0x00,0x00,0x00,0x6C,0xFE,0x92,0xD6,0x44},/*"3",3*/
+ 100          
+ 101          {0x00,0x00,0x00,0x20,0xFE,0xFE,0x24,0x38},/*"4",4*/
+ 102          
+ 103          {0x00,0x00,0x00,0x62,0xF2,0x92,0x9E,0x9E},/*"5",5*/
+ 104          
+ 105          {0x00,0x00,0x00,0x64,0xF6,0x92,0xFE,0x7C},/*"6",6*/
+ 106          
+ 107          {0x00,0x00,0x00,0x0E,0x1E,0xF2,0xE6,0x06},/*"7",7*/
+ 108          
+ 109          {0x00,0x00,0x00,0x6C,0xFE,0x92,0xFE,0x6C},/*"8",8*/
+ 110          
+ 111          {0x00,0x00,0x00,0x7C,0xFE,0x92,0xDE,0x4C}/*"9",9*/
+ 112          };
+ 113          /*------------------------------------------------
+ 114                          硬件端口定义
+ 115          ------------------------------------------------*/
+ 116          
+ 117          sbit LATCH = P2^6; 
+C51 COMPILER V9.01   DISPLAY                                                               04/30/2016 21:06:41 PAGE 3   
+
+ 118          sbit SRCLK= P2^5;
+ 119          sbit SER  = P2^7;
+ 120          
+ 121          //行信号控制
+ 122          sbit LATCH_B = P2^3;
+ 123          sbit SRCLK_B= P2^4;
+ 124          sbit SER_B= P2^2;
+ 125          
+ 126          
+ 127          /*------------------------------------------------
+ 128                          发送字节程序
+ 129          ------------------------------------------------*/
+ 130          static void SendByte(unsigned char dat)
+ 131          {    
+ 132   1        unsigned char i; 
+ 133   1              
+ 134   1              for(i=0;i<8;i++)
+ 135   1              {
+ 136   2                      SRCLK_B=0;
+ 137   2                      SER_B=dat&0x80;
+ 138   2                      dat<<=1;
+ 139   2                      SRCLK_B=1;
+ 140   2              }
+ 141   1      }
+ 142          /*------------------------------------------------
+ 143                          发送双字节序
+ 144               595级联，n个595，就需要发送n字节后锁存
+ 145          ------------------------------------------------*/
+ 146          static void Send4Byte(unsigned char dat1,unsigned char dat2,unsigned char dat3,unsigned char dat4)
+ 147          {    
+ 148   1         SendByte(dat1);
+ 149   1         SendByte(dat2);
+ 150   1         SendByte(dat3);
+ 151   1         SendByte(dat4);
+ 152   1         LATCH_B=0;
+ 153   1         LATCH_B=1;     
+ 154   1      }
+ 155          
+ 156          /*------------------------------------------------
+ 157                  行信号
+ 158          ------------------------------------------------*/
+ 159          static void SendSeg(unsigned char dat)
+ 160          {    
+ 161   1      unsigned char i; 
+ 162   1              
+ 163   1         for(i=0;i<8;i++)  //发送8行对应的数据
+ 164   1              {
+ 165   2                      SRCLK=0;
+ 166   2                      SER=dat&0x80;
+ 167   2                      dat<<=1;
+ 168   2                      SRCLK=1;
+ 169   2              }
+ 170   1              LATCH=0;    //锁存
+ 171   1              LATCH=1;
+ 172   1      }
+ 173          
+ 174          static void Send_Data(unsigned char dat1[],unsigned char dat2[],unsigned char dat3[],unsigned char dat4[])
+ 175          {
+ 176   1              unsigned char i = 0;
+ 177   1              for(i = 0;i < 8;i++)
+ 178   1              {
+ 179   2                      SendSeg(~segout[i]); //0xfd
+C51 COMPILER V9.01   DISPLAY                                                               04/30/2016 21:06:41 PAGE 4   
+
+ 180   2                      Send4Byte(dat4[i],dat3[i],dat2[i],dat1[i]);
+ 181   2                      Send4Byte(0x00,0x00,0x00,0x00);//delay(10); //防止重
+ 182   2              }
+ 183   1      }
+ 184          
+ 185          static void Data_Deal(void)
+ 186          {
+ 187   1              shi = time_buf1[4];//时 
+ 188   1              fen = time_buf1[5];//分
+ 189   1              miao = time_buf1[6];//秒        
+ 190   1              nian = time_buf1[1];//年                                                                            
+ 191   1              yue = time_buf1[2];//月
+ 192   1              ri = time_buf1[3];//日  
+ 193   1              zhou = time_buf1[7];//周
+ 194   1              Send_Data(&lift_num[shi/10][0],&lift_num_dot[shi%10][0],&right_num_dot[fen/10][0],&right_num[fen%10][0]);
+ 195   1      }
+ 196          
+ 197          void Display_Task()
+ 198          {
+ 199   1              Data_Deal();
+ 200   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    214    ----
-   CONSTANT SIZE    =   ----    ----
+   CODE SIZE        =    376    ----
+   CONSTANT SIZE    =    400    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =      8      17
+   DATA SIZE        =     22      17
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

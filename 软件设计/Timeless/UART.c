@@ -72,7 +72,7 @@ void UART_SER (void) interrupt 4 //串行中断服务程序
 	}
 	if(TI)  //如果是发送标志位，清零
 	{
-		TI=0;
+//		TI=0;
 	}
 } 
 

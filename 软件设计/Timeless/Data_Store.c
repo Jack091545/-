@@ -1,7 +1,8 @@
 #include "stc12c5a60s2.h"
 #include "Data_Store.h"
 #include "UART.h"
-#include<intrins.h>
+#include <intrins.h>
+#include <stdio.h>
 
 
 #define CMD_IDLE 0
@@ -97,6 +98,7 @@ unsigned char Get_Boot_Flag(void)
 
 unsigned int Get_Timeless(void)
 {
+
 	return (IAP_ReadByte(IAP_ADDRESS_SEC1+2)<<8)|(IAP_ReadByte(IAP_ADDRESS_SEC1+3))	;
 }
 
@@ -107,8 +109,10 @@ void Set_Timeless(unsigned int data_Time)
 
 	IAP_ProgramByte(IAP_ADDRESS_SEC1,0x55);
 	IAP_ProgramByte(IAP_ADDRESS_SEC1+1,0xAA);
-	IAP_ProgramByte(IAP_ADDRESS_SEC1+2,data_Time&0xff00);
-	IAP_ProgramByte(IAP_ADDRESS_SEC1+3,data_Time&0x00ff);		
+
+
+	IAP_ProgramByte(IAP_ADDRESS_SEC1+2,data_Time>>8);
+	IAP_ProgramByte(IAP_ADDRESS_SEC1+3,(data_Time&0x00ff));		
 }
 
 void IAP_Task(void)

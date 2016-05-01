@@ -1,9 +1,9 @@
-C51 COMPILER V9.01   DISPLAY                                                               05/01/2016 22:02:25 PAGE 1   
+C51 COMPILER V9.00   DISPLAY                                                               05/02/2016 02:09:30 PAGE 1   
 
 
-C51 COMPILER V9.01, COMPILATION OF MODULE DISPLAY
+C51 COMPILER V9.00, COMPILATION OF MODULE DISPLAY
 OBJECT MODULE PLACED IN Display.OBJ
-COMPILER INVOKED BY: D:\software\KEILC51\C51\BIN\C51.EXE Display.c LARGE BROWSE DEBUG OBJECTEXTEND
+COMPILER INVOKED BY: C:\D\software\KEILC51\C51\BIN\C51.EXE Display.c LARGE BROWSE DEFINE(__WEI__) DEBUG OBJECTEXTEND
 
 line level    source
 
@@ -62,7 +62,7 @@ line level    source
   53          static unsigned char code lift_num_dot[10][8] = {
   54          {0x6c,0x00,0x7C,0xFE,0x82,0xFE,0x7C,0x00},/*"0",0*/
   55          
-C51 COMPILER V9.01   DISPLAY                                                               05/01/2016 22:02:25 PAGE 2   
+C51 COMPILER V9.00   DISPLAY                                                               05/02/2016 02:09:30 PAGE 2   
 
   56          {0x6c,0x00,0x00,0x80,0xFE,0xFE,0x84,0x00},/*"1",0*/
   57          
@@ -126,7 +126,7 @@ line level    source
  115          {0x00,0x00,0x00,0x7C,0xFE,0x92,0xDE,0x4C}/*"9",9*/
  116          };
  117          /*------------------------------------------------
-C51 COMPILER V9.01   DISPLAY                                                               05/01/2016 22:02:25 PAGE 3   
+C51 COMPILER V9.00   DISPLAY                                                               05/02/2016 02:09:30 PAGE 3   
 
  118                          硬件端口定义
  119          ------------------------------------------------*/
@@ -190,7 +190,7 @@ line level    source
  177          
  178          static void Send_Data(unsigned char dat1[],unsigned char dat2[],unsigned char dat3[],unsigned char dat4[])
  179          {
-C51 COMPILER V9.01   DISPLAY                                                               05/01/2016 22:02:25 PAGE 4   
+C51 COMPILER V9.00   DISPLAY                                                               05/02/2016 02:09:30 PAGE 4   
 
  180   1              unsigned char i = 0;
  181   1              for(i = 0;i < 8;i++)
@@ -214,24 +214,51 @@ line level    source
  199   1              Send_Data(&lift_num[shi/10][0],&lift_num_dot[shi%10][0],&right_num_dot[fen/10][0],&right_num[fen%10][0]);
  200   1      }
  201          
- 202          static void Data_Deal_Cry(void)
+ 202          static void update_Timeless(void)
  203          {
- 204   1              unsigned int temp;
- 205   1              if((shi == 1)&&(fen == 1))
- 206   1              {
- 207   2                      Set_Timeless(Get_Timeless() - 1);
- 208   2              }
- 209   1              temp = Get_Timeless() ;
- 210   1              qian = (temp /1000)%10;
- 211   1              bai = (temp /100)%10 ;
- 212   1              si =  (temp /10)%10     ;
- 213   1              ge = temp %10    ;
- 214   1              Send_Data(&lift_num[qian][0],&lift_num[bai][0],&lift_num[si][0],&lift_num[ge][0]);
- 215   1      }
- 216          
- 217          void Display_Task()
- 218          {
- 219   1      #ifdef __WEI__
+ 204   1              
+ 205   1      }
+ 206          
+ 207          static void Data_Deal_Cry(void)
+ 208          {
+ 209   1              unsigned int temp;
+ 210   1              static unsigned char flag = 0;
+ 211   1              if((shi == 2)&&(fen == 11))
+ 212   1              {
+ 213   2                      if(flag == 0)
+ 214   2                      {
+ 215   3                              Set_Timeless(Get_Timeless() - 1);
+ 216   3                              flag = 1;
+ 217   3                      }
+ 218   2      
+ 219   2              }
+ 220   1              if((shi==2)&&(fen == 12))
+ 221   1              {
+ 222   2                      flag = 0;
+ 223   2              }
+ 224   1      
+ 225   1              temp = Get_Timeless() ;
+ 226   1              qian = (temp /1000)%10;
+ 227   1              bai = (temp /100)%10 ;
+ 228   1              si =  (temp /10)%10     ;
+ 229   1              ge = temp %10    ;
+ 230   1              Send_Data(&lift_num[qian][0],&lift_num[bai][0],&lift_num[si][0],&lift_num[ge][0]);
+ 231   1      }
+ 232          
+ 233          void Display_Task()
+ 234          {
+ 235   1      #ifdef __WEI__
+ 236   1              if(Get_Display_Switch())
+ 237   1              {
+ 238   2                      Data_Deal();
+ 239   2              }
+ 240   1              else
+ 241   1              {
+C51 COMPILER V9.00   DISPLAY                                                               05/02/2016 02:09:30 PAGE 5   
+
+ 242   2                      Data_Deal_Cry();
+ 243   2              }
+ 244   1      #else
                       if(Get_Display_Switch())
                       {
                               Data_Deal();
@@ -240,26 +267,15 @@ line level    source
                       {
                               Data_Deal_Cry();
                       }
-              #else
- 229   1              if(Get_Display_Switch())
- 230   1              {
- 231   2                      Data_Deal();
- 232   2              }
- 233   1              else
- 234   1              {
- 235   2                      Data_Deal_Cry();
- 236   2              }
- 237   1      #endif
- 238   1              
- 239   1      }
+              #endif
+ 254   1              
+ 255   1      }
 
-
-C51 COMPILER V9.01   DISPLAY                                                               05/01/2016 22:02:25 PAGE 5   
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    762    ----
+   CODE SIZE        =    803    ----
    CONSTANT SIZE    =    400    ----
-   XDATA SIZE       =     29      16
+   XDATA SIZE       =     30      16
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----

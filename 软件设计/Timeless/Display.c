@@ -199,13 +199,29 @@ static void Data_Deal(void)
 	Send_Data(&lift_num[shi/10][0],&lift_num_dot[shi%10][0],&right_num_dot[fen/10][0],&right_num[fen%10][0]);
 }
 
+static void update_Timeless(void)
+{
+	
+}
+
 static void Data_Deal_Cry(void)
 {
 	unsigned int temp;
-	if((shi == 1)&&(fen == 1))
+	static unsigned char flag = 0;
+	if((shi == 2)&&(fen == 11))
 	{
-		Set_Timeless(Get_Timeless() - 1);
+		if(flag == 0)
+		{
+			Set_Timeless(Get_Timeless() - 1);
+			flag = 1;
+		}
+
 	}
+	if((shi==2)&&(fen == 12))
+	{
+		flag = 0;
+	}
+
 	temp = Get_Timeless() ;
 	qian = (temp /1000)%10;
 	bai = (temp /100)%10 ;

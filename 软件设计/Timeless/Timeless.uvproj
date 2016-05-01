@@ -292,7 +292,7 @@
             <InterruptVectorAddress>0</InterruptVectorAddress>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define></Define>
+              <Define>__WEI__</Define>
               <Undefine></Undefine>
               <IncludePath></IncludePath>
             </VariousControls>

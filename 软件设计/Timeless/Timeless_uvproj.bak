@@ -168,7 +168,7 @@
         </Utilities>
         <Target51>
           <Target51Misc>
-            <MemoryModel>0</MemoryModel>
+            <MemoryModel>2</MemoryModel>
             <RTOS>0</RTOS>
             <RomSize>2</RomSize>
             <DataHold>0</DataHold>
@@ -292,7 +292,7 @@
             <InterruptVectorAddress>0</InterruptVectorAddress>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>__DEBUG__</Define>
+              <Define></Define>
               <Undefine></Undefine>
               <IncludePath></IncludePath>
             </VariousControls>
@@ -375,11 +375,6 @@
               <FileName>Data_Store.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Data_Store.c</FilePath>
-            </File>
-            <File>
-              <FileName>UI.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\UI.c</FilePath>
             </File>
           </Files>
         </Group>

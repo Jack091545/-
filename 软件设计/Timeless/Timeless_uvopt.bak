@@ -179,10 +179,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>4</ColumnNumber>
+      <ColumnNumber>24</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>13</TopLine>
-      <CurrentLine>36</CurrentLine>
+      <TopLine>6</TopLine>
+      <CurrentLine>42</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -193,10 +193,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>39</ColumnNumber>
+      <ColumnNumber>26</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>193</TopLine>
+      <CurrentLine>207</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\Display.c</PathWithFileName>
       <FilenameWithoutPath>Display.c</FilenameWithoutPath>
@@ -207,10 +207,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>42</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>170</TopLine>
-      <CurrentLine>185</CurrentLine>
+      <CurrentLine>191</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\DS1302.c</PathWithFileName>
       <FilenameWithoutPath>DS1302.c</FilenameWithoutPath>
@@ -221,10 +221,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>2</ColumnNumber>
+      <ColumnNumber>39</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>46</TopLine>
-      <CurrentLine>84</CurrentLine>
+      <TopLine>39</TopLine>
+      <CurrentLine>39</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\UART.c</PathWithFileName>
       <FilenameWithoutPath>UART.c</FilenameWithoutPath>
@@ -235,10 +235,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>40</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>4</TopLine>
-      <CurrentLine>10</CurrentLine>
+      <TopLine>15</TopLine>
+      <CurrentLine>50</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\Timer.c</PathWithFileName>
       <FilenameWithoutPath>Timer.c</FilenameWithoutPath>
@@ -249,27 +249,13 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>5</ColumnNumber>
+      <ColumnNumber>51</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>123</TopLine>
-      <CurrentLine>150</CurrentLine>
+      <TopLine>108</TopLine>
+      <CurrentLine>129</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\Data_Store.c</PathWithFileName>
       <FilenameWithoutPath>Data_Store.c</FilenameWithoutPath>
-    </File>
-    <File>
-      <GroupNumber>1</GroupNumber>
-      <FileNumber>0</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <ColumnNumber>4</ColumnNumber>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>23</CurrentLine>
-      <bDave2>0</bDave2>
-      <PathWithFileName>.\UI.c</PathWithFileName>
-      <FilenameWithoutPath>UI.c</FilenameWithoutPath>
     </File>
   </Group>
 
@@ -326,9 +312,87 @@
   </AlienFiles>
 
   <AlienFiles>
-    <PathWithFilename>C:\Users\Jackie\Desktop\TimeLess\软件设计\Timeless\UI.h</PathWithFilename>
+    <PathWithFilename>D:\software\KEILC51\C51\INC\string.h</PathWithFilename>
+    <TopLine>15</TopLine>
+    <CurrentLine>49</CurrentLine>
+    <Constant>0</Constant>
+    <WindowPosition>
+      <length>0</length>
+      <flags>0</flags>
+      <showCmd>0</showCmd>
+      <MinPosition>
+        <xPos>0</xPos>
+        <yPos>0</yPos>
+      </MinPosition>
+      <MaxPosition>
+        <xPos>0</xPos>
+        <yPos>0</yPos>
+      </MaxPosition>
+      <NormalPosition>
+        <Top>0</Top>
+        <Left>0</Left>
+        <Right>0</Right>
+        <Bottom>0</Bottom>
+      </NormalPosition>
+    </WindowPosition>
+  </AlienFiles>
+
+  <AlienFiles>
+    <PathWithFilename>D:\software\KEILC51\C51\INC\stdio.h</PathWithFilename>
+    <TopLine>4</TopLine>
+    <CurrentLine>35</CurrentLine>
+    <Constant>0</Constant>
+    <WindowPosition>
+      <length>0</length>
+      <flags>0</flags>
+      <showCmd>0</showCmd>
+      <MinPosition>
+        <xPos>0</xPos>
+        <yPos>0</yPos>
+      </MinPosition>
+      <MaxPosition>
+        <xPos>0</xPos>
+        <yPos>0</yPos>
+      </MaxPosition>
+      <NormalPosition>
+        <Top>0</Top>
+        <Left>0</Left>
+        <Right>0</Right>
+        <Bottom>0</Bottom>
+      </NormalPosition>
+    </WindowPosition>
+  </AlienFiles>
+
+  <AlienFiles>
+    <PathWithFilename>C:\Users\Jackie\Desktop\TimeLess\软件设计\Timeless\UART.H</PathWithFilename>
     <TopLine>1</TopLine>
-    <CurrentLine>5</CurrentLine>
+    <CurrentLine>9</CurrentLine>
+    <Constant>0</Constant>
+    <WindowPosition>
+      <length>0</length>
+      <flags>0</flags>
+      <showCmd>0</showCmd>
+      <MinPosition>
+        <xPos>0</xPos>
+        <yPos>0</yPos>
+      </MinPosition>
+      <MaxPosition>
+        <xPos>0</xPos>
+        <yPos>0</yPos>
+      </MaxPosition>
+      <NormalPosition>
+        <Top>0</Top>
+        <Left>0</Left>
+        <Right>0</Right>
+        <Bottom>0</Bottom>
+      </NormalPosition>
+    </WindowPosition>
+  </AlienFiles>
+
+  <AlienFiles>
+    <PathWithFilename>C:\Users\Jackie\Desktop\TimeLess\软件设计\Timeless\TIMER.H</PathWithFilename>
+    <TopLine>1</TopLine>
+    <CurrentLine>6</CurrentLine>
     <Constant>0</Constant>
     <WindowPosition>
       <length>0</length>
@@ -1692,19 +1756,19 @@
     <ActiveMDIGroup>0</ActiveMDIGroup>
     <MDIGroup>
       <Size>100</Size>
-      <ActiveTab>6</ActiveTab>
+      <ActiveTab>1</ActiveTab>
       <Documents>
         <Doc>
           <Name>DATA_STORE.H</Name>
-          <ColumnNumber>16</ColumnNumber>
+          <ColumnNumber>42</ColumnNumber>
           <TopLine>1</TopLine>
           <CurrentLine>12</CurrentLine>
         </Doc>
         <Doc>
           <Name>.\Data_Store.c</Name>
-          <ColumnNumber>5</ColumnNumber>
-          <TopLine>123</TopLine>
-          <CurrentLine>150</CurrentLine>
+          <ColumnNumber>51</ColumnNumber>
+          <TopLine>108</TopLine>
+          <CurrentLine>129</CurrentLine>
         </Doc>
         <Doc>
           <Name>STC12C5A60S2.H</Name>
@@ -1714,39 +1778,57 @@
         </Doc>
         <Doc>
           <Name>.\main.c</Name>
-          <ColumnNumber>4</ColumnNumber>
-          <TopLine>13</TopLine>
-          <CurrentLine>36</CurrentLine>
+          <ColumnNumber>24</ColumnNumber>
+          <TopLine>6</TopLine>
+          <CurrentLine>42</CurrentLine>
         </Doc>
         <Doc>
           <Name>.\Timer.c</Name>
-          <ColumnNumber>0</ColumnNumber>
-          <TopLine>4</TopLine>
-          <CurrentLine>10</CurrentLine>
+          <ColumnNumber>40</ColumnNumber>
+          <TopLine>15</TopLine>
+          <CurrentLine>50</CurrentLine>
         </Doc>
         <Doc>
           <Name>.\UART.c</Name>
-          <ColumnNumber>41</ColumnNumber>
-          <TopLine>46</TopLine>
-          <CurrentLine>56</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>.\UI.c</Name>
-          <ColumnNumber>2</ColumnNumber>
-          <TopLine>1</TopLine>
-          <CurrentLine>26</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>UI.H</Name>
-          <ColumnNumber>45</ColumnNumber>
-          <TopLine>1</TopLine>
-          <CurrentLine>5</CurrentLine>
+          <ColumnNumber>39</ColumnNumber>
+          <TopLine>39</TopLine>
+          <CurrentLine>39</CurrentLine>
         </Doc>
         <Doc>
           <Name>.\DS1302.c</Name>
-          <ColumnNumber>0</ColumnNumber>
+          <ColumnNumber>42</ColumnNumber>
           <TopLine>170</TopLine>
-          <CurrentLine>185</CurrentLine>
+          <CurrentLine>191</CurrentLine>
+        </Doc>
+        <Doc>
+          <Name>D:\SOFTWARE\KEILC51\C51\INC\STRING.H</Name>
+          <ColumnNumber>66</ColumnNumber>
+          <TopLine>15</TopLine>
+          <CurrentLine>49</CurrentLine>
+        </Doc>
+        <Doc>
+          <Name>D:\SOFTWARE\KEILC51\C51\INC\STDIO.H</Name>
+          <ColumnNumber>36</ColumnNumber>
+          <TopLine>4</TopLine>
+          <CurrentLine>35</CurrentLine>
+        </Doc>
+        <Doc>
+          <Name>UART.H</Name>
+          <ColumnNumber>53</ColumnNumber>
+          <TopLine>1</TopLine>
+          <CurrentLine>9</CurrentLine>
+        </Doc>
+        <Doc>
+          <Name>.\Display.c</Name>
+          <ColumnNumber>26</ColumnNumber>
+          <TopLine>193</TopLine>
+          <CurrentLine>207</CurrentLine>
+        </Doc>
+        <Doc>
+          <Name>TIMER.H</Name>
+          <ColumnNumber>67</ColumnNumber>
+          <TopLine>1</TopLine>
+          <CurrentLine>6</CurrentLine>
         </Doc>
       </Documents>
     </MDIGroup>

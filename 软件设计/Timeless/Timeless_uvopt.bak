@@ -179,10 +179,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>38</ColumnNumber>
+      <ColumnNumber>4</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>8</CurrentLine>
+      <TopLine>13</TopLine>
+      <CurrentLine>36</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -193,10 +193,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>30</ColumnNumber>
+      <ColumnNumber>39</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>1</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\Display.c</PathWithFileName>
       <FilenameWithoutPath>Display.c</FilenameWithoutPath>
@@ -209,8 +209,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>3</CurrentLine>
+      <TopLine>170</TopLine>
+      <CurrentLine>185</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\DS1302.c</PathWithFileName>
       <FilenameWithoutPath>DS1302.c</FilenameWithoutPath>
@@ -221,10 +221,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>76</ColumnNumber>
+      <ColumnNumber>2</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>11</CurrentLine>
+      <TopLine>46</TopLine>
+      <CurrentLine>84</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\UART.c</PathWithFileName>
       <FilenameWithoutPath>UART.c</FilenameWithoutPath>
@@ -235,13 +235,27 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>16</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>4</CurrentLine>
+      <TopLine>4</TopLine>
+      <CurrentLine>10</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>.\Timer.c</PathWithFileName>
       <FilenameWithoutPath>Timer.c</FilenameWithoutPath>
+    </File>
+    <File>
+      <GroupNumber>1</GroupNumber>
+      <FileNumber>6</FileNumber>
+      <FileType>1</FileType>
+      <tvExp>0</tvExp>
+      <Focus>0</Focus>
+      <ColumnNumber>5</ColumnNumber>
+      <tvExpOptDlg>0</tvExpOptDlg>
+      <TopLine>123</TopLine>
+      <CurrentLine>150</CurrentLine>
+      <bDave2>0</bDave2>
+      <PathWithFileName>.\Data_Store.c</PathWithFileName>
+      <FilenameWithoutPath>Data_Store.c</FilenameWithoutPath>
     </File>
     <File>
       <GroupNumber>1</GroupNumber>
@@ -249,20 +263,20 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>8</ColumnNumber>
+      <ColumnNumber>4</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>7</TopLine>
-      <CurrentLine>19</CurrentLine>
+      <TopLine>1</TopLine>
+      <CurrentLine>23</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>.\Data_Store.c</PathWithFileName>
-      <FilenameWithoutPath>Data_Store.c</FilenameWithoutPath>
+      <PathWithFileName>.\UI.c</PathWithFileName>
+      <FilenameWithoutPath>UI.c</FilenameWithoutPath>
     </File>
   </Group>
 
   <AlienFiles>
-    <PathWithFilename>C:\Users\Jackie\Desktop\TimeLess\软件设计\Timeless\DS1302.H</PathWithFilename>
+    <PathWithFilename>C:\Users\Jackie\Desktop\TimeLess\软件设计\Timeless\DATA_STORE.H</PathWithFilename>
     <TopLine>1</TopLine>
-    <CurrentLine>1</CurrentLine>
+    <CurrentLine>12</CurrentLine>
     <Constant>0</Constant>
     <WindowPosition>
       <length>0</length>
@@ -286,87 +300,35 @@
   </AlienFiles>
 
   <AlienFiles>
-    <PathWithFilename>C:\Users\Jackie\Desktop\TimeLess\软件设计\Timeless\DISPLAY.H</PathWithFilename>
+    <PathWithFilename>C:\Users\Jackie\Desktop\TimeLess\软件设计\Timeless\STC12C5A60S2.H</PathWithFilename>
+    <TopLine>275</TopLine>
+    <CurrentLine>275</CurrentLine>
+    <Constant>0</Constant>
+    <WindowPosition>
+      <length>0</length>
+      <flags>0</flags>
+      <showCmd>0</showCmd>
+      <MinPosition>
+        <xPos>0</xPos>
+        <yPos>0</yPos>
+      </MinPosition>
+      <MaxPosition>
+        <xPos>0</xPos>
+        <yPos>0</yPos>
+      </MaxPosition>
+      <NormalPosition>
+        <Top>0</Top>
+        <Left>0</Left>
+        <Right>0</Right>
+        <Bottom>0</Bottom>
+      </NormalPosition>
+    </WindowPosition>
+  </AlienFiles>
+
+  <AlienFiles>
+    <PathWithFilename>C:\Users\Jackie\Desktop\TimeLess\软件设计\Timeless\UI.h</PathWithFilename>
     <TopLine>1</TopLine>
     <CurrentLine>5</CurrentLine>
-    <Constant>0</Constant>
-    <WindowPosition>
-      <length>0</length>
-      <flags>0</flags>
-      <showCmd>0</showCmd>
-      <MinPosition>
-        <xPos>0</xPos>
-        <yPos>0</yPos>
-      </MinPosition>
-      <MaxPosition>
-        <xPos>0</xPos>
-        <yPos>0</yPos>
-      </MaxPosition>
-      <NormalPosition>
-        <Top>0</Top>
-        <Left>0</Left>
-        <Right>0</Right>
-        <Bottom>0</Bottom>
-      </NormalPosition>
-    </WindowPosition>
-  </AlienFiles>
-
-  <AlienFiles>
-    <PathWithFilename>C:\Users\Jackie\Desktop\TimeLess\软件设计\Timeless\TIMER.H</PathWithFilename>
-    <TopLine>1</TopLine>
-    <CurrentLine>5</CurrentLine>
-    <Constant>0</Constant>
-    <WindowPosition>
-      <length>0</length>
-      <flags>0</flags>
-      <showCmd>0</showCmd>
-      <MinPosition>
-        <xPos>0</xPos>
-        <yPos>0</yPos>
-      </MinPosition>
-      <MaxPosition>
-        <xPos>0</xPos>
-        <yPos>0</yPos>
-      </MaxPosition>
-      <NormalPosition>
-        <Top>0</Top>
-        <Left>0</Left>
-        <Right>0</Right>
-        <Bottom>0</Bottom>
-      </NormalPosition>
-    </WindowPosition>
-  </AlienFiles>
-
-  <AlienFiles>
-    <PathWithFilename>C:\Users\Jackie\Desktop\TimeLess\软件设计\Timeless\stc12c5a60s2.h</PathWithFilename>
-    <TopLine>266</TopLine>
-    <CurrentLine>266</CurrentLine>
-    <Constant>0</Constant>
-    <WindowPosition>
-      <length>0</length>
-      <flags>0</flags>
-      <showCmd>0</showCmd>
-      <MinPosition>
-        <xPos>0</xPos>
-        <yPos>0</yPos>
-      </MinPosition>
-      <MaxPosition>
-        <xPos>0</xPos>
-        <yPos>0</yPos>
-      </MaxPosition>
-      <NormalPosition>
-        <Top>0</Top>
-        <Left>0</Left>
-        <Right>0</Right>
-        <Bottom>0</Bottom>
-      </NormalPosition>
-    </WindowPosition>
-  </AlienFiles>
-
-  <AlienFiles>
-    <PathWithFilename>C:\Users\Jackie\Desktop\TimeLess\软件设计\Timeless\Data_Store.h</PathWithFilename>
-    <TopLine>1</TopLine>
-    <CurrentLine>7</CurrentLine>
     <Constant>0</Constant>
     <WindowPosition>
       <length>0</length>
@@ -1730,73 +1692,61 @@
     <ActiveMDIGroup>0</ActiveMDIGroup>
     <MDIGroup>
       <Size>100</Size>
-      <ActiveTab>9</ActiveTab>
+      <ActiveTab>6</ActiveTab>
       <Documents>
         <Doc>
-          <Name>.\main.c</Name>
-          <ColumnNumber>38</ColumnNumber>
+          <Name>DATA_STORE.H</Name>
+          <ColumnNumber>16</ColumnNumber>
           <TopLine>1</TopLine>
-          <CurrentLine>8</CurrentLine>
+          <CurrentLine>12</CurrentLine>
+        </Doc>
+        <Doc>
+          <Name>.\Data_Store.c</Name>
+          <ColumnNumber>5</ColumnNumber>
+          <TopLine>123</TopLine>
+          <CurrentLine>150</CurrentLine>
+        </Doc>
+        <Doc>
+          <Name>STC12C5A60S2.H</Name>
+          <ColumnNumber>0</ColumnNumber>
+          <TopLine>275</TopLine>
+          <CurrentLine>275</CurrentLine>
+        </Doc>
+        <Doc>
+          <Name>.\main.c</Name>
+          <ColumnNumber>4</ColumnNumber>
+          <TopLine>13</TopLine>
+          <CurrentLine>36</CurrentLine>
+        </Doc>
+        <Doc>
+          <Name>.\Timer.c</Name>
+          <ColumnNumber>0</ColumnNumber>
+          <TopLine>4</TopLine>
+          <CurrentLine>10</CurrentLine>
+        </Doc>
+        <Doc>
+          <Name>.\UART.c</Name>
+          <ColumnNumber>41</ColumnNumber>
+          <TopLine>46</TopLine>
+          <CurrentLine>56</CurrentLine>
+        </Doc>
+        <Doc>
+          <Name>.\UI.c</Name>
+          <ColumnNumber>2</ColumnNumber>
+          <TopLine>1</TopLine>
+          <CurrentLine>26</CurrentLine>
+        </Doc>
+        <Doc>
+          <Name>UI.H</Name>
+          <ColumnNumber>45</ColumnNumber>
+          <TopLine>1</TopLine>
+          <CurrentLine>5</CurrentLine>
         </Doc>
         <Doc>
           <Name>.\DS1302.c</Name>
           <ColumnNumber>0</ColumnNumber>
-          <TopLine>1</TopLine>
-          <CurrentLine>3</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>.\Timer.c</Name>
-          <ColumnNumber>20</ColumnNumber>
-          <TopLine>9</TopLine>
-          <CurrentLine>11</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>.\Display.c</Name>
-          <ColumnNumber>30</ColumnNumber>
-          <TopLine>1</TopLine>
-          <CurrentLine>1</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>DS1302.H</Name>
-          <ColumnNumber>44</ColumnNumber>
-          <TopLine>1</TopLine>
-          <CurrentLine>1</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>DISPLAY.H</Name>
-          <ColumnNumber>17</ColumnNumber>
-          <TopLine>1</TopLine>
-          <CurrentLine>5</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>.\UART.c</Name>
-          <ColumnNumber>76</ColumnNumber>
-          <TopLine>1</TopLine>
-          <CurrentLine>11</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>TIMER.H</Name>
-          <ColumnNumber>0</ColumnNumber>
-          <TopLine>1</TopLine>
-          <CurrentLine>5</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>STC12C5A60S2.H</Name>
-          <ColumnNumber>38</ColumnNumber>
-          <TopLine>266</TopLine>
-          <CurrentLine>266</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>.\Data_Store.c</Name>
-          <ColumnNumber>0</ColumnNumber>
-          <TopLine>19</TopLine>
-          <CurrentLine>19</CurrentLine>
-        </Doc>
-        <Doc>
-          <Name>DATA_STORE.H</Name>
-          <ColumnNumber>0</ColumnNumber>
-          <TopLine>1</TopLine>
-          <CurrentLine>7</CurrentLine>
+          <TopLine>170</TopLine>
+          <CurrentLine>185</CurrentLine>
         </Doc>
       </Documents>
     </MDIGroup>

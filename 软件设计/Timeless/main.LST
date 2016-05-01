@@ -1,9 +1,9 @@
-C51 COMPILER V9.01   MAIN                                                                  04/30/2016 21:06:41 PAGE 1   
+C51 COMPILER V9.01   MAIN                                                                  05/01/2016 22:02:25 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
 OBJECT MODULE PLACED IN main.OBJ
-COMPILER INVOKED BY: D:\software\KEILC51\C51\BIN\C51.EXE main.c BROWSE DEBUG OBJECTEXTEND
+COMPILER INVOKED BY: D:\software\KEILC51\C51\BIN\C51.EXE main.c LARGE BROWSE DEBUG OBJECTEXTEND
 
 line level    source
 
@@ -16,44 +16,55 @@ line level    source
    7          #include <intrins.h> 
    8          #include <stdio.h>
    9          
-  10          
-  11          void Init_Task(void)
-  12          {
-  13   1      
-  14   1              Ds1302_Init();
-  15   1      #ifdef SET
+  10          void Init_Task(void)
+  11          {
+  12   1      
+  13   1              Ds1302_Init();
+  14   1      #ifdef __DEBUG__
                       Ds1302_Write_Time();
               #endif
-  18   1              Timer_Init();
-  19   1              UART_Init();
+  17   1              Timer_Init();
+  18   1              UART_Init();
+  19   1              IAP_Task();
   20   1              EA = 1;                 
-  21   1      //      SendStr("Timeless V1.0\n");
+  21   1              SendStr("Timeless V1.0\n");
   22   1      }
   23          
-  24          /*------------------------------------------------
-  25                             主程序
-  26          ------------------------------------------------*/
-  27          void main(void)
-  28          {
-  29   1              Init_Task();
-  30   1              IAP_ProgramByte(0x0010,0x55);
-  31   1              IAP_ProgramByte(0x0011,0xAA);
-  32   1      
-  33   1      
-  34   1      
-  35   1              while(1)
-  36   1              {
-  37   2                      Read_Time_Task();               
-  38   2                      Display_Task();
-  39   2              }
-  40   1      }
-  41          
-  42          
+  24          void Process_Task(void)
+  25          {
+  26   1              if(Get_Boot_Flag())
+  27   1              {
+  28   2                      Update_Time_Task();
+  29   2                      Read_Time_Task();               
+  30   2                      Display_Task();
+  31   2      
+  32   2              }
+  33   1              else
+  34   1              {
+  35   2                       SendStr("Timeless Imformations has been stolen!\n");
+  36   2              }       
+  37   1      }
+  38          
+  39          /*------------------------------------------------
+  40                             主程序
+  41          ------------------------------------------------*/
+  42          void main(void)
+  43          {
+  44   1              Init_Task();
+  45   1              while(1)
+  46   1              {
+  47   2                       Process_Task();
+  48   2              }
+  49   1      }
+  50          
+  51          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     41    ----
-   CONSTANT SIZE    =   ----    ----
+   CODE SIZE        =     56    ----
+C51 COMPILER V9.01   MAIN                                                                  05/01/2016 22:02:25 PAGE 2   
+
+   CONSTANT SIZE    =     55    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----

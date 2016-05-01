@@ -1,226 +1,267 @@
-C51 COMPILER V9.01   DISPLAY                                                               04/30/2016 21:06:41 PAGE 1   
+C51 COMPILER V9.01   DISPLAY                                                               05/01/2016 22:02:25 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE DISPLAY
 OBJECT MODULE PLACED IN Display.OBJ
-COMPILER INVOKED BY: D:\software\KEILC51\C51\BIN\C51.EXE Display.c BROWSE DEBUG OBJECTEXTEND
+COMPILER INVOKED BY: D:\software\KEILC51\C51\BIN\C51.EXE Display.c LARGE BROWSE DEBUG OBJECTEXTEND
 
 line level    source
 
    1          #include "stc12c5a60s2.h"
    2          #include "ds1302.h"
-   3          
-   4          unsigned int nian,yue,ri,shi,fen,miao,zhou; //存储显示值的全局变量
-   5          static unsigned char  segout[8]={0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80}; //8列
-   6          unsigned char code number[10][8]={
-   7          {0x00,0x38,0x6C,0x6C,0x6C,0x6C,0x6C,0x38},/*"0",0*/
-   8          
-   9          {0x00,0x18,0x1C,0x18,0x18,0x18,0x18,0x3C},/*"1",1*/
-  10          
-  11          {0x00,0x38,0x6C,0x60,0x30,0x18,0x0C,0x7C},/*"2",2*/
+   3          #include "Timer.h"
+   4          #include "data_store.h"
+   5          
+   6          static unsigned char *time_data_buff;
+   7          static unsigned int nian,yue,ri,shi,fen,miao,zhou; //存储显示值的全局变量
+   8          static unsigned char qian = 9,bai= 9,si = 9,ge=9;
+   9          static unsigned char  segout[8]={0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80}; //8列
+  10          static unsigned char code number[10][8]={
+  11          {0x00,0x38,0x6C,0x6C,0x6C,0x6C,0x6C,0x38},/*"0",0*/
   12          
-  13          {0x00,0x38,0x6C,0x60,0x38,0x60,0x6C,0x38},/*"3",3*/
+  13          {0x00,0x18,0x1C,0x18,0x18,0x18,0x18,0x3C},/*"1",1*/
   14          
-  15          {0x00,0x30,0x38,0x38,0x3C,0x3C,0x7C,0x30},/*"4",4*/
+  15          {0x00,0x38,0x6C,0x60,0x30,0x18,0x0C,0x7C},/*"2",2*/
   16          
-  17          {0x00,0x7C,0x0C,0x0C,0x3C,0x60,0x60,0x3C},/*"5",5*/
+  17          {0x00,0x38,0x6C,0x60,0x38,0x60,0x6C,0x38},/*"3",3*/
   18          
-  19          {0x00,0x38,0x6C,0x0C,0x3C,0x6C,0x6C,0x38},/*"6",6*/
+  19          {0x00,0x30,0x38,0x38,0x3C,0x3C,0x7C,0x30},/*"4",4*/
   20          
-  21          {0x00,0x7C,0x6C,0x60,0x30,0x18,0x18,0x18},/*"7",7*/
+  21          {0x00,0x7C,0x0C,0x0C,0x3C,0x60,0x60,0x3C},/*"5",5*/
   22          
-  23          {0x00,0x38,0x6C,0x6C,0x38,0x6C,0x6C,0x38},/*"8",8*/
+  23          {0x00,0x38,0x6C,0x0C,0x3C,0x6C,0x6C,0x38},/*"6",6*/
   24          
-  25          {0x00,0x38,0x6C,0x6C,0x78,0x60,0x6C,0x38}/*"9",9*/
-  26          };
-  27          
-  28          unsigned char code lift_num[10][8]= {
-  29          {0x7C,0xFE,0x82,0xFE,0x7C,0x00,0x00,0x00},/*"0",0*/
-  30          
-  31          {0x00,0x80,0xFE,0xFE,0x84,0x00,0x00,0x00},/*"1",1*/
-  32          
-  33          {0x8C,0x9E,0xB2,0xE6,0xC4,0x00,0x00,0x00},/*"2",2*/
+  25          {0x00,0x7C,0x6C,0x60,0x30,0x18,0x18,0x18},/*"7",7*/
+  26          
+  27          {0x00,0x38,0x6C,0x6C,0x38,0x6C,0x6C,0x38},/*"8",8*/
+  28          
+  29          {0x00,0x38,0x6C,0x6C,0x78,0x60,0x6C,0x38}/*"9",9*/
+  30          };
+  31          
+  32          static unsigned char code lift_num[10][8]= {
+  33          {0x7C,0xFE,0x82,0xFE,0x7C,0x00,0x00,0x00},/*"0",0*/
   34          
-  35          {0x6C,0xFE,0x92,0xD6,0x44,0x00,0x00,0x00},/*"3",3*/
+  35          {0x00,0x80,0xFE,0xFE,0x84,0x00,0x00,0x00},/*"1",1*/
   36          
-  37          {0x20,0xFE,0xFE,0x24,0x38,0x00,0x00,0x00},/*"4",4*/
+  37          {0x8C,0x9E,0xB2,0xE6,0xC4,0x00,0x00,0x00},/*"2",2*/
   38          
-  39          {0x62,0xF2,0x92,0x9E,0x9E,0x00,0x00,0x00},/*"5",5*/
+  39          {0x6C,0xFE,0x92,0xD6,0x44,0x00,0x00,0x00},/*"3",3*/
   40          
-  41          {0x64,0xF6,0x92,0xFE,0x7C,0x00,0x00,0x00},/*"6",6*/
+  41          {0x20,0xFE,0xFE,0x24,0x38,0x00,0x00,0x00},/*"4",4*/
   42          
-  43          {0x0E,0x1E,0xF2,0xE6,0x06,0x00,0x00,0x00},/*"7",7*/
+  43          {0x62,0xF2,0x92,0x9E,0x9E,0x00,0x00,0x00},/*"5",5*/
   44          
-  45          {0x6C,0xFE,0x92,0xFE,0x6C,0x00,0x00,0x00},/*"8",8*/
+  45          {0x64,0xF6,0x92,0xFE,0x7C,0x00,0x00,0x00},/*"6",6*/
   46          
-  47          {0x7C,0xFE,0x92,0xDE,0x4C,0x00,0x00,0x00}/*"9",9*/
-  48          };
-  49          unsigned char code lift_num_dot[10][8] = {
-  50          {0x6c,0x00,0x7C,0xFE,0x82,0xFE,0x7C,0x00},/*"0",0*/
-  51          
-  52          {0x6c,0x00,0x00,0x80,0xFE,0xFE,0x84,0x00},/*"1",0*/
-  53          
-  54          {0x6c,0x00,0x8C,0x9E,0xB2,0xE6,0xC4,0x00},/*"2",2*/
+  47          {0x0E,0x1E,0xF2,0xE6,0x06,0x00,0x00,0x00},/*"7",7*/
+  48          
+  49          {0x6C,0xFE,0x92,0xFE,0x6C,0x00,0x00,0x00},/*"8",8*/
+  50          
+  51          {0x7C,0xFE,0x92,0xDE,0x4C,0x00,0x00,0x00}/*"9",9*/
+  52          };
+  53          static unsigned char code lift_num_dot[10][8] = {
+  54          {0x6c,0x00,0x7C,0xFE,0x82,0xFE,0x7C,0x00},/*"0",0*/
   55          
-C51 COMPILER V9.01   DISPLAY                                                               04/30/2016 21:06:41 PAGE 2   
+C51 COMPILER V9.01   DISPLAY                                                               05/01/2016 22:02:25 PAGE 2   
 
-  56          {0x6c,0x00,0x6C,0xFE,0x92,0xD6,0x44,0x00},/*"3",3*/
+  56          {0x6c,0x00,0x00,0x80,0xFE,0xFE,0x84,0x00},/*"1",0*/
   57          
-  58          {0x6c,0x00,0x20,0xFE,0xFE,0x24,0x38,0x00},/*"4",4*/
+  58          {0x6c,0x00,0x8C,0x9E,0xB2,0xE6,0xC4,0x00},/*"2",2*/
   59          
-  60          {0x6c,0x00,0x62,0xF2,0x92,0x9E,0x9E,0x00},/*"5",5*/
+  60          {0x6c,0x00,0x6C,0xFE,0x92,0xD6,0x44,0x00},/*"3",3*/
   61          
-  62          {0x6c,0x00,0x64,0xF6,0x92,0xFE,0x7C,0x00},/*"6",6*/
+  62          {0x6c,0x00,0x20,0xFE,0xFE,0x24,0x38,0x00},/*"4",4*/
   63          
-  64          {0x6c,0x00,0x0E,0x1E,0xF2,0xE6,0x06,0x00},/*"7",7*/
+  64          {0x6c,0x00,0x62,0xF2,0x92,0x9E,0x9E,0x00},/*"5",5*/
   65          
-  66          {0x6c,0x00,0x6C,0xFE,0x92,0xFE,0x6C,0x00},/*"8",8*/
+  66          {0x6c,0x00,0x64,0xF6,0x92,0xFE,0x7C,0x00},/*"6",6*/
   67          
-  68          {0x6c,0x00,0x7C,0xFE,0x92,0xDE,0x4C,0x00}/*"9",9*/
-  69          };
-  70          unsigned char code right_num_dot[10][8] = {
-  71          {0x00,0x7C,0xFE,0x82,0xFE,0x7C,0x00,0x6c},/*"0",0*/
-  72          
-  73          {0x00,0x80,0xFE,0xFE,0x84,0x00,0x00,0x6c},/*"1",0*/
-  74          
-  75          {0x00,0x8C,0x9E,0xB2,0xE6,0xC4,0x00,0x6c},/*"2",2*/
+  68          {0x6c,0x00,0x0E,0x1E,0xF2,0xE6,0x06,0x00},/*"7",7*/
+  69          
+  70          {0x6c,0x00,0x6C,0xFE,0x92,0xFE,0x6C,0x00},/*"8",8*/
+  71          
+  72          {0x6c,0x00,0x7C,0xFE,0x92,0xDE,0x4C,0x00}/*"9",9*/
+  73          };
+  74          static unsigned char code right_num_dot[10][8] = {
+  75          {0x00,0x7C,0xFE,0x82,0xFE,0x7C,0x00,0x6c},/*"0",0*/
   76          
-  77          {0x00,0x6C,0xFE,0x92,0xD6,0x44,0x00,0x6c},/*"3",3*/
+  77          {0x00,0x80,0xFE,0xFE,0x84,0x00,0x00,0x6c},/*"1",0*/
   78          
-  79          {0x00,0x20,0xFE,0xFE,0x24,0x38,0x00,0x6C},/*"4",4*/
+  79          {0x00,0x8C,0x9E,0xB2,0xE6,0xC4,0x00,0x6c},/*"2",2*/
   80          
-  81          {0x00,0x62,0xF2,0x92,0x9E,0x9E,0x00,0x6c},/*"5",5*/
+  81          {0x00,0x6C,0xFE,0x92,0xD6,0x44,0x00,0x6c},/*"3",3*/
   82          
-  83          {0x00,0x64,0xF6,0x92,0xFE,0x7C,0x00,0x6c},/*"6",6*/
+  83          {0x00,0x20,0xFE,0xFE,0x24,0x38,0x00,0x6C},/*"4",4*/
   84          
-  85          {0x00,0x0E,0x1E,0xF2,0xE6,0x06,0x00,0x6c},/*"7",7*/
+  85          {0x00,0x62,0xF2,0x92,0x9E,0x9E,0x00,0x6c},/*"5",5*/
   86          
-  87          {0x00,0x6C,0xFE,0x92,0xFE,0x6C,0x00,0x6c},/*"8",8*/
+  87          {0x00,0x64,0xF6,0x92,0xFE,0x7C,0x00,0x6c},/*"6",6*/
   88          
-  89          {0x00,0x7C,0xFE,0x92,0xDE,0x4C,0x00,0x6c}/*"9",9*/
+  89          {0x00,0x0E,0x1E,0xF2,0xE6,0x06,0x00,0x6c},/*"7",7*/
   90          
-  91          };
-  92          unsigned char code right_num[10][8] = {
-  93          {0x00,0x00,0x00,0x7C,0xFE,0x82,0xFE,0x7C},/*"0",0*/
+  91          {0x00,0x6C,0xFE,0x92,0xFE,0x6C,0x00,0x6c},/*"8",8*/
+  92          
+  93          {0x00,0x7C,0xFE,0x92,0xDE,0x4C,0x00,0x6c}/*"9",9*/
   94          
-  95          {0x00,0x00,0x00,0x00,0x80,0xFE,0xFE,0x84},/*"1",1*/
-  96          
-  97          {0x00,0x00,0x00,0x8C,0x9E,0xB2,0xE6,0xC4},/*"2",2*/
+  95          };
+  96          static unsigned char code right_num[10][8] = {
+  97          {0x00,0x00,0x00,0x7C,0xFE,0x82,0xFE,0x7C},/*"0",0*/
   98          
-  99          {0x00,0x00,0x00,0x6C,0xFE,0x92,0xD6,0x44},/*"3",3*/
+  99          {0x00,0x00,0x00,0x00,0x80,0xFE,0xFE,0x84},/*"1",1*/
  100          
- 101          {0x00,0x00,0x00,0x20,0xFE,0xFE,0x24,0x38},/*"4",4*/
+ 101          {0x00,0x00,0x00,0x8C,0x9E,0xB2,0xE6,0xC4},/*"2",2*/
  102          
- 103          {0x00,0x00,0x00,0x62,0xF2,0x92,0x9E,0x9E},/*"5",5*/
+ 103          {0x00,0x00,0x00,0x6C,0xFE,0x92,0xD6,0x44},/*"3",3*/
  104          
- 105          {0x00,0x00,0x00,0x64,0xF6,0x92,0xFE,0x7C},/*"6",6*/
+ 105          {0x00,0x00,0x00,0x20,0xFE,0xFE,0x24,0x38},/*"4",4*/
  106          
- 107          {0x00,0x00,0x00,0x0E,0x1E,0xF2,0xE6,0x06},/*"7",7*/
+ 107          {0x00,0x00,0x00,0x62,0xF2,0x92,0x9E,0x9E},/*"5",5*/
  108          
- 109          {0x00,0x00,0x00,0x6C,0xFE,0x92,0xFE,0x6C},/*"8",8*/
+ 109          {0x00,0x00,0x00,0x64,0xF6,0x92,0xFE,0x7C},/*"6",6*/
  110          
- 111          {0x00,0x00,0x00,0x7C,0xFE,0x92,0xDE,0x4C}/*"9",9*/
- 112          };
- 113          /*------------------------------------------------
- 114                          硬件端口定义
- 115          ------------------------------------------------*/
- 116          
- 117          sbit LATCH = P2^6; 
-C51 COMPILER V9.01   DISPLAY                                                               04/30/2016 21:06:41 PAGE 3   
+ 111          {0x00,0x00,0x00,0x0E,0x1E,0xF2,0xE6,0x06},/*"7",7*/
+ 112          
+ 113          {0x00,0x00,0x00,0x6C,0xFE,0x92,0xFE,0x6C},/*"8",8*/
+ 114          
+ 115          {0x00,0x00,0x00,0x7C,0xFE,0x92,0xDE,0x4C}/*"9",9*/
+ 116          };
+ 117          /*------------------------------------------------
+C51 COMPILER V9.01   DISPLAY                                                               05/01/2016 22:02:25 PAGE 3   
 
- 118          sbit SRCLK= P2^5;
- 119          sbit SER  = P2^7;
+ 118                          硬件端口定义
+ 119          ------------------------------------------------*/
  120          
- 121          //行信号控制
- 122          sbit LATCH_B = P2^3;
- 123          sbit SRCLK_B= P2^4;
- 124          sbit SER_B= P2^2;
- 125          
- 126          
- 127          /*------------------------------------------------
- 128                          发送字节程序
- 129          ------------------------------------------------*/
- 130          static void SendByte(unsigned char dat)
- 131          {    
- 132   1        unsigned char i; 
- 133   1              
- 134   1              for(i=0;i<8;i++)
- 135   1              {
- 136   2                      SRCLK_B=0;
- 137   2                      SER_B=dat&0x80;
- 138   2                      dat<<=1;
- 139   2                      SRCLK_B=1;
- 140   2              }
- 141   1      }
- 142          /*------------------------------------------------
- 143                          发送双字节序
- 144               595级联，n个595，就需要发送n字节后锁存
- 145          ------------------------------------------------*/
- 146          static void Send4Byte(unsigned char dat1,unsigned char dat2,unsigned char dat3,unsigned char dat4)
- 147          {    
- 148   1         SendByte(dat1);
- 149   1         SendByte(dat2);
- 150   1         SendByte(dat3);
- 151   1         SendByte(dat4);
- 152   1         LATCH_B=0;
- 153   1         LATCH_B=1;     
- 154   1      }
- 155          
- 156          /*------------------------------------------------
- 157                  行信号
- 158          ------------------------------------------------*/
- 159          static void SendSeg(unsigned char dat)
- 160          {    
- 161   1      unsigned char i; 
- 162   1              
- 163   1         for(i=0;i<8;i++)  //发送8行对应的数据
- 164   1              {
- 165   2                      SRCLK=0;
- 166   2                      SER=dat&0x80;
- 167   2                      dat<<=1;
- 168   2                      SRCLK=1;
- 169   2              }
- 170   1              LATCH=0;    //锁存
- 171   1              LATCH=1;
- 172   1      }
- 173          
- 174          static void Send_Data(unsigned char dat1[],unsigned char dat2[],unsigned char dat3[],unsigned char dat4[])
- 175          {
- 176   1              unsigned char i = 0;
- 177   1              for(i = 0;i < 8;i++)
- 178   1              {
- 179   2                      SendSeg(~segout[i]); //0xfd
-C51 COMPILER V9.01   DISPLAY                                                               04/30/2016 21:06:41 PAGE 4   
+ 121          sbit LATCH = P2^6; 
+ 122          sbit SRCLK= P2^5;
+ 123          sbit SER  = P2^7;
+ 124          
+ 125          //行信号控制
+ 126          sbit LATCH_B = P2^3;
+ 127          sbit SRCLK_B= P2^4;
+ 128          sbit SER_B= P2^2;
+ 129          
+ 130          
+ 131          /*------------------------------------------------
+ 132                          发送字节程序
+ 133          ------------------------------------------------*/
+ 134          static void SendByte(unsigned char dat)
+ 135          {    
+ 136   1        unsigned char i; 
+ 137   1              
+ 138   1              for(i=0;i<8;i++)
+ 139   1              {
+ 140   2                      SRCLK_B=0;
+ 141   2                      SER_B=dat&0x80;
+ 142   2                      dat<<=1;
+ 143   2                      SRCLK_B=1;
+ 144   2              }
+ 145   1      }
+ 146          /*------------------------------------------------
+ 147                          发送双字节序
+ 148               595级联，n个595，就需要发送n字节后锁存
+ 149          ------------------------------------------------*/
+ 150          static void Send4Byte(unsigned char dat1,unsigned char dat2,unsigned char dat3,unsigned char dat4)
+ 151          {    
+ 152   1         SendByte(dat1);
+ 153   1         SendByte(dat2);
+ 154   1         SendByte(dat3);
+ 155   1         SendByte(dat4);
+ 156   1         LATCH_B=0;
+ 157   1         LATCH_B=1;     
+ 158   1      }
+ 159          
+ 160          /*------------------------------------------------
+ 161                  行信号
+ 162          ------------------------------------------------*/
+ 163          static void SendSeg(unsigned char dat)
+ 164          {    
+ 165   1      unsigned char i; 
+ 166   1              
+ 167   1         for(i=0;i<8;i++)  //发送8行对应的数据
+ 168   1              {
+ 169   2                      SRCLK=0;
+ 170   2                      SER=dat&0x80;
+ 171   2                      dat<<=1;
+ 172   2                      SRCLK=1;
+ 173   2              }
+ 174   1              LATCH=0;    //锁存
+ 175   1              LATCH=1;
+ 176   1      }
+ 177          
+ 178          static void Send_Data(unsigned char dat1[],unsigned char dat2[],unsigned char dat3[],unsigned char dat4[])
+ 179          {
+C51 COMPILER V9.01   DISPLAY                                                               05/01/2016 22:02:25 PAGE 4   
 
- 180   2                      Send4Byte(dat4[i],dat3[i],dat2[i],dat1[i]);
- 181   2                      Send4Byte(0x00,0x00,0x00,0x00);//delay(10); //防止重
- 182   2              }
- 183   1      }
- 184          
- 185          static void Data_Deal(void)
- 186          {
- 187   1              shi = time_buf1[4];//时 
- 188   1              fen = time_buf1[5];//分
- 189   1              miao = time_buf1[6];//秒        
- 190   1              nian = time_buf1[1];//年                                                                            
- 191   1              yue = time_buf1[2];//月
- 192   1              ri = time_buf1[3];//日  
- 193   1              zhou = time_buf1[7];//周
- 194   1              Send_Data(&lift_num[shi/10][0],&lift_num_dot[shi%10][0],&right_num_dot[fen/10][0],&right_num[fen%10][0]);
- 195   1      }
- 196          
- 197          void Display_Task()
- 198          {
- 199   1              Data_Deal();
+ 180   1              unsigned char i = 0;
+ 181   1              for(i = 0;i < 8;i++)
+ 182   1              {
+ 183   2                      SendSeg(~segout[i]); //0xfd
+ 184   2                      Send4Byte(dat4[i],dat3[i],dat2[i],dat1[i]);
+ 185   2                      Send4Byte(0x00,0x00,0x00,0x00);//delay(10); //防止重
+ 186   2              }
+ 187   1      }
+ 188          
+ 189          static void Data_Deal(void)
+ 190          {
+ 191   1              time_data_buff = Get_time_buf1();
+ 192   1              shi = time_data_buff[4];//时    
+ 193   1              fen = time_data_buff[5];//分
+ 194   1              miao = time_data_buff[6];//秒   
+ 195   1              nian = time_data_buff[1];//年                                                                       
+ 196   1              yue = time_data_buff[2];//月
+ 197   1              ri = time_data_buff[3];//日     
+ 198   1              zhou = time_data_buff[7];//周
+ 199   1              Send_Data(&lift_num[shi/10][0],&lift_num_dot[shi%10][0],&right_num_dot[fen/10][0],&right_num[fen%10][0]);
  200   1      }
+ 201          
+ 202          static void Data_Deal_Cry(void)
+ 203          {
+ 204   1              unsigned int temp;
+ 205   1              if((shi == 1)&&(fen == 1))
+ 206   1              {
+ 207   2                      Set_Timeless(Get_Timeless() - 1);
+ 208   2              }
+ 209   1              temp = Get_Timeless() ;
+ 210   1              qian = (temp /1000)%10;
+ 211   1              bai = (temp /100)%10 ;
+ 212   1              si =  (temp /10)%10     ;
+ 213   1              ge = temp %10    ;
+ 214   1              Send_Data(&lift_num[qian][0],&lift_num[bai][0],&lift_num[si][0],&lift_num[ge][0]);
+ 215   1      }
+ 216          
+ 217          void Display_Task()
+ 218          {
+ 219   1      #ifdef __WEI__
+                      if(Get_Display_Switch())
+                      {
+                              Data_Deal();
+                      }
+                      else
+                      {
+                              Data_Deal_Cry();
+                      }
+              #else
+ 229   1              if(Get_Display_Switch())
+ 230   1              {
+ 231   2                      Data_Deal();
+ 232   2              }
+ 233   1              else
+ 234   1              {
+ 235   2                      Data_Deal_Cry();
+ 236   2              }
+ 237   1      #endif
+ 238   1              
+ 239   1      }
 
+
+C51 COMPILER V9.01   DISPLAY                                                               05/01/2016 22:02:25 PAGE 5   
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    376    ----
+   CODE SIZE        =    762    ----
    CONSTANT SIZE    =    400    ----
-   XDATA SIZE       =   ----    ----
+   XDATA SIZE       =     29      16
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =     22      17
+   DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

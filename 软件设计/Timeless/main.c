@@ -7,18 +7,33 @@
 #include <intrins.h> 
 #include <stdio.h>
 
-
 void Init_Task(void)
 {
 
 	Ds1302_Init();
-#ifdef SET
+#ifdef __DEBUG__
 	Ds1302_Write_Time();
 #endif
 	Timer_Init();
 	UART_Init();
+	IAP_Task();
 	EA = 1;			
-//	SendStr("Timeless V1.0\n");
+	SendStr("Timeless V1.0\n");
+}
+
+void Process_Task(void)
+{
+	if(Get_Boot_Flag())
+	{
+		Update_Time_Task();
+		Read_Time_Task();		
+		Display_Task();
+
+	}
+	else
+	{
+		 SendStr("Timeless Imformations has been stolen!\n");
+	}	
 }
 
 /*------------------------------------------------
@@ -27,15 +42,9 @@ void Init_Task(void)
 void main(void)
 {
 	Init_Task();
-	IAP_ProgramByte(0x0010,0x55);
-	IAP_ProgramByte(0x0011,0xAA);
-
-
-
 	while(1)
 	{
-		Read_Time_Task();		
-		Display_Task();
+		 Process_Task();
 	}
 }
 

@@ -3,9 +3,43 @@
 #include<intrins.h>
 
 
+//复位脚
+#define RST_CLR	RST=0//电平置低
+#define RST_SET	RST=1//电平置高
 
-unsigned char time_buf1[8] = {20,16,4,30,17,18,00,6};//空年月日时分秒周
-unsigned char time_buf[8] ;                         //空年月日时分秒周
+
+//双向数据
+#define IO_CLR	SDA=0//电平置低
+#define IO_SET	SDA=1//电平置高
+#define IO_R	SDA  //电平读取
+
+
+//时钟信号
+#define SCK_CLR	SCK=0//时钟信号
+#define SCK_SET	SCK=1//电平置高
+
+
+#define ds1302_sec_add			0x80		//秒数据地址
+#define ds1302_min_add			0x82		//分数据地址
+#define ds1302_hr_add			0x84		//时数据地址
+#define ds1302_date_add			0x86		//日数据地址
+#define ds1302_month_add		0x88		//月数据地址
+#define ds1302_day_add			0x8a		//星期数据地址
+#define ds1302_year_add			0x8c		//年数据地址
+#define ds1302_control_add		0x8e		//控制数据地址
+#define ds1302_charger_add		0x90 					 
+#define ds1302_clkburst_add		0xbe
+
+sbit SCK=P1^7;		
+sbit SDA=P1^6;		
+sbit RST=P1^5;
+
+static unsigned char SetFlag;     //更新时间标志位
+static unsigned char time_buf1[8] = {20,16,4,30,17,19,0,6};//空年月日时分秒周
+static unsigned char time_buf[8] ;                         //空年月日时分秒周
+
+
+
 /*------------------------------------------------
            向DS1302写入一字节数据
 ------------------------------------------------*/
@@ -148,6 +182,22 @@ void Ds1302_Read_Time(void)
 	   }
 }
 
+unsigned char Get_SetFlag(void)
+{
+	return SetFlag;
+}
+
+void Set_SetFlag(unsigned char flag_data)
+{
+	 SetFlag = flag_data;
+}
+
+unsigned char *Get_time_buf1(void)
+{
+	return time_buf1;
+}
+
+
 /*------------------------------------------------
                 DS1302初始化
 ------------------------------------------------*/
@@ -163,6 +213,15 @@ void Ds1302_Init(void)
 void Read_Time_Task(void)
 {
 	Ds1302_Read_Time();
+}
+
+void Update_Time_Task(void)
+{
+	if(1 == Get_SetFlag())     //如果接收到串口信息则更新时钟
+	{
+		Ds1302_Write_Time();			
+		Set_SetFlag(0);       //时钟信息更新后标志位清零
+	}	
 }
 
 

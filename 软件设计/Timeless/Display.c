@@ -1,9 +1,13 @@
 #include "stc12c5a60s2.h"
 #include "ds1302.h"
+#include "Timer.h"
+#include "data_store.h"
 
-unsigned int nian,yue,ri,shi,fen,miao,zhou; //存储显示值的全局变量
+static unsigned char *time_data_buff;
+static unsigned int nian,yue,ri,shi,fen,miao,zhou; //存储显示值的全局变量
+static unsigned char qian = 9,bai= 9,si = 9,ge=9;
 static unsigned char  segout[8]={0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80}; //8列
-unsigned char code number[10][8]={
+static unsigned char code number[10][8]={
 {0x00,0x38,0x6C,0x6C,0x6C,0x6C,0x6C,0x38},/*"0",0*/
 
 {0x00,0x18,0x1C,0x18,0x18,0x18,0x18,0x3C},/*"1",1*/
@@ -25,7 +29,7 @@ unsigned char code number[10][8]={
 {0x00,0x38,0x6C,0x6C,0x78,0x60,0x6C,0x38}/*"9",9*/
 };
 
-unsigned char code lift_num[10][8]= {
+static unsigned char code lift_num[10][8]= {
 {0x7C,0xFE,0x82,0xFE,0x7C,0x00,0x00,0x00},/*"0",0*/
 
 {0x00,0x80,0xFE,0xFE,0x84,0x00,0x00,0x00},/*"1",1*/
@@ -46,7 +50,7 @@ unsigned char code lift_num[10][8]= {
 
 {0x7C,0xFE,0x92,0xDE,0x4C,0x00,0x00,0x00}/*"9",9*/
 };
-unsigned char code lift_num_dot[10][8] = {
+static unsigned char code lift_num_dot[10][8] = {
 {0x6c,0x00,0x7C,0xFE,0x82,0xFE,0x7C,0x00},/*"0",0*/
 
 {0x6c,0x00,0x00,0x80,0xFE,0xFE,0x84,0x00},/*"1",0*/
@@ -67,7 +71,7 @@ unsigned char code lift_num_dot[10][8] = {
 
 {0x6c,0x00,0x7C,0xFE,0x92,0xDE,0x4C,0x00}/*"9",9*/
 };
-unsigned char code right_num_dot[10][8] = {
+static unsigned char code right_num_dot[10][8] = {
 {0x00,0x7C,0xFE,0x82,0xFE,0x7C,0x00,0x6c},/*"0",0*/
 
 {0x00,0x80,0xFE,0xFE,0x84,0x00,0x00,0x6c},/*"1",0*/
@@ -89,7 +93,7 @@ unsigned char code right_num_dot[10][8] = {
 {0x00,0x7C,0xFE,0x92,0xDE,0x4C,0x00,0x6c}/*"9",9*/
 
 };
-unsigned char code right_num[10][8] = {
+static unsigned char code right_num[10][8] = {
 {0x00,0x00,0x00,0x7C,0xFE,0x82,0xFE,0x7C},/*"0",0*/
 
 {0x00,0x00,0x00,0x00,0x80,0xFE,0xFE,0x84},/*"1",1*/
@@ -184,17 +188,52 @@ static void Send_Data(unsigned char dat1[],unsigned char dat2[],unsigned char da
 
 static void Data_Deal(void)
 {
-	shi = time_buf1[4];//时	
-	fen = time_buf1[5];//分
-	miao = time_buf1[6];//秒	
-	nian = time_buf1[1];//年									    
-	yue = time_buf1[2];//月
-	ri = time_buf1[3];//日	
-	zhou = time_buf1[7];//周
+	time_data_buff = Get_time_buf1();
+	shi = time_data_buff[4];//时	
+	fen = time_data_buff[5];//分
+	miao = time_data_buff[6];//秒	
+	nian = time_data_buff[1];//年									    
+	yue = time_data_buff[2];//月
+	ri = time_data_buff[3];//日	
+	zhou = time_data_buff[7];//周
 	Send_Data(&lift_num[shi/10][0],&lift_num_dot[shi%10][0],&right_num_dot[fen/10][0],&right_num[fen%10][0]);
+}
+
+static void Data_Deal_Cry(void)
+{
+	unsigned int temp;
+	if((shi == 1)&&(fen == 1))
+	{
+		Set_Timeless(Get_Timeless() - 1);
+	}
+	temp = Get_Timeless() ;
+	qian = (temp /1000)%10;
+	bai = (temp /100)%10 ;
+	si =  (temp /10)%10	;
+	ge = temp %10	 ;
+	Send_Data(&lift_num[qian][0],&lift_num[bai][0],&lift_num[si][0],&lift_num[ge][0]);
 }
 
 void Display_Task()
 {
-	Data_Deal();
+#ifdef __WEI__
+	if(Get_Display_Switch())
+	{
+		Data_Deal();
+	}
+	else
+	{
+		Data_Deal_Cry();
+	}
+#else
+	if(Get_Display_Switch())
+	{
+		Data_Deal();
+	}
+	else
+	{
+		Data_Deal_Cry();
+	}
+#endif
+	
 }

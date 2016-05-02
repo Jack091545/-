@@ -4,10 +4,14 @@
 #include "data_store.h"
 
 static unsigned char *time_data_buff;
-static unsigned int nian,yue,ri,shi,fen,miao,zhou; //存储显示值的全局变量
-static unsigned char qian = 9,bai= 9,si = 9,ge=9;
-static unsigned char  segout[8]={0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80}; //8列
-static unsigned char code number[10][8]={
+
+static unsigned int nian,yue,ri,shi,fen,miao,zhou; /* 存储时钟显示值的全局变量 */
+
+static unsigned char qian = 9,bai= 9,si = 9,ge=9;  /* 存储剩余天数显示值的全局变量 */
+
+static const unsigned char  segout[8]={0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80}; /* 用于595对行的选择 */
+
+static const unsigned char code number[10][8]={
 {0x00,0x38,0x6C,0x6C,0x6C,0x6C,0x6C,0x38},/*"0",0*/
 
 {0x00,0x18,0x1C,0x18,0x18,0x18,0x18,0x3C},/*"1",1*/
@@ -29,7 +33,7 @@ static unsigned char code number[10][8]={
 {0x00,0x38,0x6C,0x6C,0x78,0x60,0x6C,0x38}/*"9",9*/
 };
 
-static unsigned char code lift_num[10][8]= {
+static const unsigned char code lift_num[10][8]= {
 {0x7C,0xFE,0x82,0xFE,0x7C,0x00,0x00,0x00},/*"0",0*/
 
 {0x00,0x80,0xFE,0xFE,0x84,0x00,0x00,0x00},/*"1",1*/
@@ -50,7 +54,8 @@ static unsigned char code lift_num[10][8]= {
 
 {0x7C,0xFE,0x92,0xDE,0x4C,0x00,0x00,0x00}/*"9",9*/
 };
-static unsigned char code lift_num_dot[10][8] = {
+
+static const unsigned char code lift_num_dot[10][8] = {
 {0x6c,0x00,0x7C,0xFE,0x82,0xFE,0x7C,0x00},/*"0",0*/
 
 {0x6c,0x00,0x00,0x80,0xFE,0xFE,0x84,0x00},/*"1",0*/
@@ -71,7 +76,8 @@ static unsigned char code lift_num_dot[10][8] = {
 
 {0x6c,0x00,0x7C,0xFE,0x92,0xDE,0x4C,0x00}/*"9",9*/
 };
-static unsigned char code right_num_dot[10][8] = {
+
+static const unsigned char code right_num_dot[10][8] = {
 {0x00,0x7C,0xFE,0x82,0xFE,0x7C,0x00,0x6c},/*"0",0*/
 
 {0x00,0x80,0xFE,0xFE,0x84,0x00,0x00,0x6c},/*"1",0*/
@@ -93,7 +99,8 @@ static unsigned char code right_num_dot[10][8] = {
 {0x00,0x7C,0xFE,0x92,0xDE,0x4C,0x00,0x6c}/*"9",9*/
 
 };
-static unsigned char code right_num[10][8] = {
+
+static const unsigned char code right_num[10][8] = {
 {0x00,0x00,0x00,0x7C,0xFE,0x82,0xFE,0x7C},/*"0",0*/
 
 {0x00,0x00,0x00,0x00,0x80,0xFE,0xFE,0x84},/*"1",1*/
@@ -175,6 +182,9 @@ unsigned char i;
 	LATCH=1;
 }
 
+/*------------------------------------------------
+	显示，从左到右
+------------------------------------------------*/
 static void Send_Data(unsigned char dat1[],unsigned char dat2[],unsigned char dat3[],unsigned char dat4[])
 {
 	unsigned char i = 0;
@@ -186,6 +196,9 @@ static void Send_Data(unsigned char dat1[],unsigned char dat2[],unsigned char da
 	}
 }
 
+/*------------------------------------------------
+	显示时钟函数
+------------------------------------------------*/
 static void Data_Deal(void)
 {
 	time_data_buff = Get_time_buf1();
@@ -199,11 +212,15 @@ static void Data_Deal(void)
 	Send_Data(&lift_num[shi/10][0],&lift_num_dot[shi%10][0],&right_num_dot[fen/10][0],&right_num[fen%10][0]);
 }
 
+
+/*------------------------------------------------
+	显示剩余天数函数
+------------------------------------------------*/
 static void Data_Deal_Cry(void)
 {
 	unsigned int temp;
 	static unsigned char flag = 0;
-	if((shi == 23)&&(fen == 58))
+	if((shi == 23)&&(fen == 58))	 /* 如果时间到了23:58，那么就开始先读取剩余天数，然后减1，再写回去 */
 	{
 		if(flag == 0)
 		{
@@ -212,7 +229,7 @@ static void Data_Deal_Cry(void)
 		}
 
 	}
-	if((shi == 23)&&(fen == 59))
+	if((shi == 23)&&(fen == 59))	 /* 如果时间到了23:59，那么就把写时间的标志位给初始化 */
 	{
 		flag = 0;
 	}
@@ -225,9 +242,13 @@ static void Data_Deal_Cry(void)
 	Send_Data(&lift_num[qian][0],&lift_num[bai][0],&lift_num[si][0],&lift_num[ge][0]);
 }
 
+
+/*------------------------------------------------
+	显示任务函数
+------------------------------------------------*/
 void Display_Task()
 {
-#ifdef __WEI__
+#ifdef __WEI__					   /* 如果定义了是魏远铭使用的版本 */
 	if(Get_Display_Switch())
 	{
 		Data_Deal();

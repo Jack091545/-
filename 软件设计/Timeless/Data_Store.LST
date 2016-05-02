@@ -1,4 +1,4 @@
-C51 COMPILER V9.00   DATA_STORE                                                            05/02/2016 13:36:54 PAGE 1   
+C51 COMPILER V9.00   DATA_STORE                                                            05/02/2016 14:37:39 PAGE 1   
 
 
 C51 COMPILER V9.00, COMPILATION OF MODULE DATA_STORE
@@ -21,8 +21,8 @@ line level    source
   12          
   13          #define ENABLE_IAP 0x83
   14          
-  15          #define IAP_ADDRESS_SEC1 0x0000
-  16          #define IAP_ADDRESS_SEC2 0x0200
+  15          #define IAP_ADDRESS_SEC1 0x0000  /* STC12C5A60S2×Ü¹²Ö»ÓÐÁ½¸öÉÈÇø£¬´óÐ¡1k        */
+  16          #define IAP_ADDRESS_SEC2 0x0200  /* Ã¿¸öÉÈÇø512¸ö×Ö½Ú */
   17          
   18          struct Private_Data
   19          {
@@ -43,100 +43,125 @@ line level    source
   34   2              }
   35   1      }
   36          
-  37          void IAP_Idle(void)
-  38          {
-  39   1              IAP_CONTR = 0;
-  40   1              IAP_CMD = 0;
-  41   1              IAP_TRIG = 0;
-  42   1              IAP_ADDRH = 0x80;
-  43   1              IAP_ADDRL = 0x00;
-  44   1      }
-  45          
-  46          unsigned char IAP_ReadByte(unsigned int addr)
-  47          {
-  48   1              unsigned char dat;
-  49   1      
-  50   1              IAP_CONTR = ENABLE_IAP;
-  51   1              IAP_CMD = CMD_READ;
-  52   1              IAP_ADDRL = addr;
-  53   1              IAP_ADDRH = addr >> 8;
-  54   1              IAP_TRIG = 0x5A;
-  55   1              IAP_TRIG = 0XA5;
-C51 COMPILER V9.00   DATA_STORE                                                            05/02/2016 13:36:54 PAGE 2   
+  37          /*
+  38           * ÉÈÇø²ÁÐ´¶Á²Ù×÷³õÊ¼»¯
+  39           */
+  40          void IAP_Idle(void)
+  41          {
+  42   1              IAP_CONTR = 0;
+  43   1              IAP_CMD = 0;
+  44   1              IAP_TRIG = 0;
+  45   1              IAP_ADDRH = 0x80;
+  46   1              IAP_ADDRL = 0x00;
+  47   1      }
+  48          
+  49          
+  50          /*
+  51           * ÉÈÇø¶Á£¬µØÖ·addr 0x0000-0x03FF£¬·µ»ØÊý¾Ý0x00-0xFF
+  52           */
+  53          unsigned char IAP_ReadByte(unsigned int addr)
+  54          {
+  55   1              unsigned char dat;
+C51 COMPILER V9.00   DATA_STORE                                                            05/02/2016 14:37:39 PAGE 2   
 
-  56   1              _nop_();
-  57   1      
-  58   1              dat = IAP_DATA;
-  59   1              IAP_Idle();
-  60   1      
-  61   1              return dat;
-  62   1      }
-  63          
-  64          
-  65          void IAP_ProgramByte(unsigned int addr,unsigned char dat)
-  66          {
-  67   1              IAP_CONTR = ENABLE_IAP;
-  68   1              IAP_CMD = CMD_PROGRAM;
-  69   1              IAP_ADDRL = addr;
-  70   1              IAP_ADDRH = addr >> 8;
-  71   1              IAP_DATA = dat;
-  72   1              IAP_TRIG = 0x5A;
-  73   1              IAP_TRIG = 0XA5;
-  74   1              _nop_();
-  75   1      
-  76   1      
-  77   1              IAP_Idle();     
-  78   1      }
-  79          
-  80          void IAP_EraseSector(unsigned int addr)
-  81          {
-  82   1              IAP_CONTR = ENABLE_IAP;
-  83   1              IAP_CMD = CMD_ERASE;
-  84   1              IAP_ADDRL = addr;
-  85   1              IAP_ADDRH = addr >> 8;
-  86   1              IAP_TRIG = 0x5A;
-  87   1              IAP_TRIG = 0XA5;
-  88   1              _nop_();
-  89   1      
-  90   1              IAP_Idle();             
-  91   1      }
-  92          
-  93          
-  94          unsigned char Get_Boot_Flag(void)
-  95          {
-  96   1              return Boot_Flag;
-  97   1      }
-  98          
-  99          unsigned int Get_Timeless(void)
- 100          {
- 101   1      
- 102   1              return (IAP_ReadByte(IAP_ADDRESS_SEC1+2)<<8)|(IAP_ReadByte(IAP_ADDRESS_SEC1+3)) ;
- 103   1      }
- 104          
- 105          void Set_Timeless(unsigned int data_Time)
- 106          {
- 107   1              IAP_EraseSector(IAP_ADDRESS_SEC1); //²Á³ýÉÈÇø1
- 108   1              Delay(10);
- 109   1      
- 110   1              IAP_ProgramByte(IAP_ADDRESS_SEC1,0x55);
- 111   1              IAP_ProgramByte(IAP_ADDRESS_SEC1+1,0xAA);
- 112   1      
- 113   1      
- 114   1              IAP_ProgramByte(IAP_ADDRESS_SEC1+2,data_Time>>8);
- 115   1              IAP_ProgramByte(IAP_ADDRESS_SEC1+3,(data_Time&0x00ff));         
- 116   1      }
- 117          
-C51 COMPILER V9.00   DATA_STORE                                                            05/02/2016 13:36:54 PAGE 3   
+  56   1      
+  57   1              IAP_CONTR = ENABLE_IAP;
+  58   1              IAP_CMD = CMD_READ;
+  59   1              IAP_ADDRL = addr;
+  60   1              IAP_ADDRH = addr >> 8;
+  61   1              IAP_TRIG = 0x5A;
+  62   1              IAP_TRIG = 0XA5;
+  63   1              _nop_();
+  64   1      
+  65   1              dat = IAP_DATA;
+  66   1              IAP_Idle();
+  67   1      
+  68   1              return dat;
+  69   1      }
+  70          
+  71          /*
+  72           * ÉÈÇøÐ´£¬µØÖ·addr 0x0000-0x03FF£¬Êý¾Ý0x00-0xFF
+  73           */
+  74          void IAP_ProgramByte(unsigned int addr,unsigned char dat)
+  75          {
+  76   1              IAP_CONTR = ENABLE_IAP;
+  77   1              IAP_CMD = CMD_PROGRAM;
+  78   1              IAP_ADDRL = addr;
+  79   1              IAP_ADDRH = addr >> 8;
+  80   1              IAP_DATA = dat;
+  81   1              IAP_TRIG = 0x5A;
+  82   1              IAP_TRIG = 0XA5;
+  83   1              _nop_();
+  84   1      
+  85   1      
+  86   1              IAP_Idle();     
+  87   1      }
+  88          
+  89          
+  90          /*
+  91           * ÉÈÇø²Á³ý£¬µØÖ·addr 0x0000-0x03FF
+  92           */
+  93          void IAP_EraseSector(unsigned int addr)
+  94          {
+  95   1              IAP_CONTR = ENABLE_IAP;
+  96   1              IAP_CMD = CMD_ERASE;
+  97   1              IAP_ADDRL = addr;
+  98   1              IAP_ADDRH = addr >> 8;
+  99   1              IAP_TRIG = 0x5A;
+ 100   1              IAP_TRIG = 0XA5;
+ 101   1              _nop_();
+ 102   1      
+ 103   1              IAP_Idle();             
+ 104   1      }
+ 105          
+ 106          /*
+ 107           * »ñÈ¡Æô¶¯±êÖ¾
+ 108           */
+ 109          unsigned char Get_Boot_Flag(void)
+ 110          {
+ 111   1              return Boot_Flag;
+ 112   1      }
+ 113          
+ 114          /*
+ 115           * »ñÈ¡Ê£ÓàÌìÊý
+ 116           */
+ 117          unsigned int Get_Timeless(void)
+C51 COMPILER V9.00   DATA_STORE                                                            05/02/2016 14:37:39 PAGE 3   
 
- 118          void IAP_Task(void)
- 119          {
- 120   1      
- 121   1      #ifdef __DEBUG__
+ 118          {
+ 119   1              return (IAP_ReadByte(IAP_ADDRESS_SEC1+2)<<8)|(IAP_ReadByte(IAP_ADDRESS_SEC1+3)) ;
+ 120   1      }
+ 121          
+ 122          
+ 123          /*
+ 124           * Ð´ÈëÆô¶¯±êÖ¾ºÍÊ£ÓàÌìÊý
+ 125           */
+ 126          void Set_Timeless(unsigned int data_Time)
+ 127          {
+ 128   1              IAP_EraseSector(IAP_ADDRESS_SEC1); //²Á³ýÉÈÇø1
+ 129   1              Delay(10);
+ 130   1      
+ 131   1              IAP_ProgramByte(IAP_ADDRESS_SEC1,0x55);
+ 132   1              IAP_ProgramByte(IAP_ADDRESS_SEC1+1,0xAA);
+ 133   1      
+ 134   1      
+ 135   1              IAP_ProgramByte(IAP_ADDRESS_SEC1+2,data_Time>>8);
+ 136   1              IAP_ProgramByte(IAP_ADDRESS_SEC1+3,(data_Time&0x00ff));         
+ 137   1      }
+ 138          
+ 139          
+ 140          /*
+ 141           * EEPROM¶ÁÐ´ÈÎÎñ
+ 142           */
+ 143          void IAP_Task(void)
+ 144          {
+ 145   1      
+ 146   1      #ifdef __DEBUG__
               
-              #ifdef __WEI__
-                      IAP_EraseSector(IAP_ADDRESS_SEC1); //²Á³ýÉÈÇø1
+              #ifdef __WEI__  /* ¶¨ÒåÁË__DEBUG__£¬ÓÖ¶¨Òå__WEI__ */
+                      IAP_EraseSector(IAP_ADDRESS_SEC1); /*²Á³ýÉÈÇø1.2        */
                       Delay(10);
-                      IAP_EraseSector(IAP_ADDRESS_SEC2); //²Á³ýÉÈÇø2
+                      IAP_EraseSector(IAP_ADDRESS_SEC2); 
                       Delay(10);
                       IAP_ProgramByte(IAP_ADDRESS_SEC1,0x55);
                       IAP_ProgramByte(IAP_ADDRESS_SEC1+1,0xAA);
@@ -148,34 +173,37 @@ line level    source
                       SendByte_UART(IAP_ReadByte(IAP_ADDRESS_SEC1+3));
                       SendByte_UART(IAP_ReadByte(IAP_ADDRESS_SEC1+2));
                       SendByte_UART(IAP_ReadByte(IAP_ADDRESS_SEC1+3));
-              #else
-                      IAP_EraseSector(IAP_ADDRESS_SEC1); //²Á³ýÉÈÇø1
+              #else      /* ¶¨ÒåÁË__DEBUG__£¬µ«Ã»ÓÐ¶¨Òå__WEI__ */
+                      IAP_EraseSector(IAP_ADDRESS_SEC1);        /* ²Á³ýÉÈÇø */
                       Delay(10);
-                      IAP_EraseSector(IAP_ADDRESS_SEC2); //²Á³ýÉÈÇø2
+                      IAP_EraseSector(IAP_ADDRESS_SEC2); 
                       Delay(10);
-                      IAP_ProgramByte(IAP_ADDRESS_SEC1,0x55);
+                      IAP_ProgramByte(IAP_ADDRESS_SEC1,0x55);  /* Ð´ÈëÆô¶¯±êÖ¾ */
                       IAP_ProgramByte(IAP_ADDRESS_SEC1+1,0xAA);
                       Delay(10);
               #endif
               
               #endif
- 149   1      
- 150   1              if((IAP_ReadByte(IAP_ADDRESS_SEC1)!= 0x55) || (IAP_ReadByte(IAP_ADDRESS_SEC1+1) != 0xAA))         //Èç¹û²»ÊÇÓÐÐ
-             -§µÄ£¬ÄÇÃ´¾Í²Á³ýEEPROMÉÏËùÓÐµÄÊý¾Ý£¬ÒÔ·ÀµÁÇÔ
- 151   1              {
- 152   2                      IAP_EraseSector(IAP_ADDRESS_SEC1); //²Á³ýÉÈÇø1
- 153   2                      IAP_EraseSector(IAP_ADDRESS_SEC2); //²Á³ýÉÈÇø2
- 154   2                      Boot_Flag = 0;          
- 155   2              }
- 156   1              else //ÊÇÓÐÐ§µÄÆô¶¯±êÖ¾
- 157   1              {
- 158   2                      Boot_Flag = 1;
- 159   2              }
- 160   1      }
- 161          
- 162          
- 163          
- 164          
+ 174   1      
+ 175   1              if((IAP_ReadByte(IAP_ADDRESS_SEC1)!= 0x55) || (IAP_ReadByte(IAP_ADDRESS_SEC1+1) != 0xAA))         /* Èç¹û²»ÊÇÓÐ
+             -Ð§µÄ£¬ÄÇÃ´¾Í²Á³ýEEPROMÉÏËùÓÐµÄÊý¾Ý£¬ÒÔ·ÀµÁÇÔ    */
+ 176   1              {
+ 177   2                      IAP_EraseSector(IAP_ADDRESS_SEC1); 
+ 178   2                      IAP_EraseSector(IAP_ADDRESS_SEC2); 
+C51 COMPILER V9.00   DATA_STORE                                                            05/02/2016 14:37:39 PAGE 4   
+
+ 179   2                      Boot_Flag = 0;          
+ 180   2              }
+ 181   1              else /*ÊÇÓÐÐ§µÄÆô¶¯±êÖ¾  */
+ 182   1              {
+ 183   2                      Boot_Flag = 1;
+ 184   2              }
+ 185   1      }
+ 186          
+ 187          
+ 188          
+ 189          
+ 190          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

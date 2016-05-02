@@ -7,6 +7,10 @@
 #include <intrins.h> 
 #include <stdio.h>
 
+
+/*
+ * 初始化任务
+ */
 void Init_Task(void)
 {
 
@@ -25,6 +29,9 @@ void Init_Task(void)
 	SendStr(".\n");
 }
 
+/*
+ * 主进程任务
+ */
 void Process_Task(void)
 {
 	if(Get_Boot_Flag())

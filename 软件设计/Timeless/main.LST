@@ -1,4 +1,4 @@
-C51 COMPILER V9.00   MAIN                                                                  05/02/2016 02:09:30 PAGE 1   
+C51 COMPILER V9.00   MAIN                                                                  05/02/2016 13:36:52 PAGE 1   
 
 
 C51 COMPILER V9.00, COMPILATION OF MODULE MAIN
@@ -27,44 +27,47 @@ line level    source
   18   1              UART_Init();
   19   1              IAP_Task();
   20   1              EA = 1;                 
-  21   1              SendStr("Timeless V1.0\n");
-  22   1      }
-  23          
-  24          void Process_Task(void)
-  25          {
-  26   1              if(Get_Boot_Flag())
-  27   1              {
-  28   2                      Update_Time_Task();
-  29   2                      Read_Time_Task();               
-  30   2                      Display_Task();
-  31   2      
-  32   2              }
-  33   1              else
-  34   1              {
-  35   2                       SendStr("Timeless Imformations has been stolen!\n");
-  36   2              }       
-  37   1      }
-  38          
-  39          /*------------------------------------------------
-  40                             主程序
-  41          ------------------------------------------------*/
-  42          void main(void)
-  43          {
-  44   1              Init_Task();
-  45   1              while(1)
-  46   1              {
-  47   2                       Process_Task();
-  48   2              }
-  49   1      }
-  50          
-  51          
+  21   1              SendStr(" Timeless V2.0,Compiled about: ");
+  22   1              SendStr(__DATE__);
+  23   1              SendStr(",");
+  24   1              SendStr(__TIME__);
+  25   1              SendStr(".\n");
+  26   1      }
+  27          
+  28          void Process_Task(void)
+  29          {
+  30   1              if(Get_Boot_Flag())
+  31   1              {
+  32   2                      Update_Time_Task();
+  33   2                      Read_Time_Task();               
+  34   2                      Display_Task();
+  35   2              }
+  36   1              else
+  37   1              {
+  38   2                       SendStr("Timeless Imformations has been stolen!\n");
+  39   2              }       
+  40   1      }
+  41          
+  42          /*------------------------------------------------
+  43                             主程序
+  44          ------------------------------------------------*/
+  45          void main(void)
+  46          {
+  47   1              Init_Task();
+  48   1              while(1)
+  49   1              {
+  50   2                       Process_Task();
+  51   2              }
+  52   1      }
+  53          
+  54          
+
+C51 COMPILER V9.00   MAIN                                                                  05/02/2016 13:36:52 PAGE 2   
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     56    ----
-C51 COMPILER V9.00   MAIN                                                                  05/02/2016 02:09:30 PAGE 2   
-
-   CONSTANT SIZE    =     55    ----
+   CODE SIZE        =     92    ----
+   CONSTANT SIZE    =     98    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =   ----    ----

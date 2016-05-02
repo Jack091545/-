@@ -18,7 +18,11 @@ void Init_Task(void)
 	UART_Init();
 	IAP_Task();
 	EA = 1;			
-	SendStr("Timeless V1.0\n");
+	SendStr(" Timeless V2.0,Compiled about: ");
+	SendStr(__DATE__);
+	SendStr(",");
+	SendStr(__TIME__);
+	SendStr(".\n");
 }
 
 void Process_Task(void)
@@ -28,7 +32,6 @@ void Process_Task(void)
 		Update_Time_Task();
 		Read_Time_Task();		
 		Display_Task();
-
 	}
 	else
 	{

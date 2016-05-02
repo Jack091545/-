@@ -1,4 +1,4 @@
-C51 COMPILER V9.00   DATA_STORE                                                            05/02/2016 02:09:32 PAGE 1   
+C51 COMPILER V9.00   DATA_STORE                                                            05/02/2016 13:36:54 PAGE 1   
 
 
 C51 COMPILER V9.00, COMPILATION OF MODULE DATA_STORE
@@ -62,7 +62,7 @@ line level    source
   53   1              IAP_ADDRH = addr >> 8;
   54   1              IAP_TRIG = 0x5A;
   55   1              IAP_TRIG = 0XA5;
-C51 COMPILER V9.00   DATA_STORE                                                            05/02/2016 02:09:32 PAGE 2   
+C51 COMPILER V9.00   DATA_STORE                                                            05/02/2016 13:36:54 PAGE 2   
 
   56   1              _nop_();
   57   1      
@@ -126,12 +126,29 @@ line level    source
  115   1              IAP_ProgramByte(IAP_ADDRESS_SEC1+3,(data_Time&0x00ff));         
  116   1      }
  117          
-C51 COMPILER V9.00   DATA_STORE                                                            05/02/2016 02:09:32 PAGE 3   
+C51 COMPILER V9.00   DATA_STORE                                                            05/02/2016 13:36:54 PAGE 3   
 
  118          void IAP_Task(void)
  119          {
  120   1      
  121   1      #ifdef __DEBUG__
+              
+              #ifdef __WEI__
+                      IAP_EraseSector(IAP_ADDRESS_SEC1); //²Á³ýÉÈÇø1
+                      Delay(10);
+                      IAP_EraseSector(IAP_ADDRESS_SEC2); //²Á³ýÉÈÇø2
+                      Delay(10);
+                      IAP_ProgramByte(IAP_ADDRESS_SEC1,0x55);
+                      IAP_ProgramByte(IAP_ADDRESS_SEC1+1,0xAA);
+              
+                      IAP_ProgramByte(IAP_ADDRESS_SEC1+2,0x0A);
+                      IAP_ProgramByte(IAP_ADDRESS_SEC1+3,0x3D);
+                      Delay(10);
+                      SendByte_UART(IAP_ReadByte(IAP_ADDRESS_SEC1+2));
+                      SendByte_UART(IAP_ReadByte(IAP_ADDRESS_SEC1+3));
+                      SendByte_UART(IAP_ReadByte(IAP_ADDRESS_SEC1+2));
+                      SendByte_UART(IAP_ReadByte(IAP_ADDRESS_SEC1+3));
+              #else
                       IAP_EraseSector(IAP_ADDRESS_SEC1); //²Á³ýÉÈÇø1
                       Delay(10);
                       IAP_EraseSector(IAP_ADDRESS_SEC2); //²Á³ýÉÈÇø2
@@ -140,45 +157,29 @@ line level    source
                       IAP_ProgramByte(IAP_ADDRESS_SEC1+1,0xAA);
                       Delay(10);
               #endif
- 130   1      #ifdef __WEI__
- 131   1              IAP_EraseSector(IAP_ADDRESS_SEC1); //²Á³ýÉÈÇø1
- 132   1              Delay(10);
- 133   1              IAP_EraseSector(IAP_ADDRESS_SEC2); //²Á³ýÉÈÇø2
- 134   1              Delay(10);
- 135   1              IAP_ProgramByte(IAP_ADDRESS_SEC1,0x55);
- 136   1              IAP_ProgramByte(IAP_ADDRESS_SEC1+1,0xAA);
- 137   1      
- 138   1              IAP_ProgramByte(IAP_ADDRESS_SEC1+2,0x0A);
- 139   1              IAP_ProgramByte(IAP_ADDRESS_SEC1+3,0x3E);
- 140   1              Delay(10);
- 141   1              SendByte_UART(IAP_ReadByte(IAP_ADDRESS_SEC1+2));
- 142   1              SendByte_UART(IAP_ReadByte(IAP_ADDRESS_SEC1+3));
- 143   1              SendByte_UART(IAP_ReadByte(IAP_ADDRESS_SEC1+2));
- 144   1              SendByte_UART(IAP_ReadByte(IAP_ADDRESS_SEC1+3));
- 145   1      
- 146   1      #endif
- 147   1      
- 148   1      
- 149   1              if((IAP_ReadByte(IAP_ADDRESS_SEC1)!= 0x55) || (IAP_ReadByte(IAP_ADDRESS_SEC1+1) != 0xAA))         //Èç¹û²»ÊÇÓÐÐ
+              
+              #endif
+ 149   1      
+ 150   1              if((IAP_ReadByte(IAP_ADDRESS_SEC1)!= 0x55) || (IAP_ReadByte(IAP_ADDRESS_SEC1+1) != 0xAA))         //Èç¹û²»ÊÇÓÐÐ
              -§µÄ£¬ÄÇÃ´¾Í²Á³ýEEPROMÉÏËùÓÐµÄÊý¾Ý£¬ÒÔ·ÀµÁÇÔ
- 150   1              {
- 151   2                      IAP_EraseSector(IAP_ADDRESS_SEC1); //²Á³ýÉÈÇø1
- 152   2                      IAP_EraseSector(IAP_ADDRESS_SEC2); //²Á³ýÉÈÇø2
- 153   2                      Boot_Flag = 0;          
- 154   2              }
- 155   1              else //ÊÇÓÐÐ§µÄÆô¶¯±êÖ¾
- 156   1              {
- 157   2                      Boot_Flag = 1;
- 158   2              }
- 159   1      }
- 160          
+ 151   1              {
+ 152   2                      IAP_EraseSector(IAP_ADDRESS_SEC1); //²Á³ýÉÈÇø1
+ 153   2                      IAP_EraseSector(IAP_ADDRESS_SEC2); //²Á³ýÉÈÇø2
+ 154   2                      Boot_Flag = 0;          
+ 155   2              }
+ 156   1              else //ÊÇÓÐÐ§µÄÆô¶¯±êÖ¾
+ 157   1              {
+ 158   2                      Boot_Flag = 1;
+ 159   2              }
+ 160   1      }
  161          
  162          
  163          
+ 164          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    284    ----
+   CODE SIZE        =    215    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =      1    ----
    PDATA SIZE       =   ----    ----

@@ -199,16 +199,11 @@ static void Data_Deal(void)
 	Send_Data(&lift_num[shi/10][0],&lift_num_dot[shi%10][0],&right_num_dot[fen/10][0],&right_num[fen%10][0]);
 }
 
-static void update_Timeless(void)
-{
-	
-}
-
 static void Data_Deal_Cry(void)
 {
 	unsigned int temp;
 	static unsigned char flag = 0;
-	if((shi == 2)&&(fen == 11))
+	if((shi == 23)&&(fen == 58))
 	{
 		if(flag == 0)
 		{
@@ -217,7 +212,7 @@ static void Data_Deal_Cry(void)
 		}
 
 	}
-	if((shi==2)&&(fen == 12))
+	if((shi == 23)&&(fen == 59))
 	{
 		flag = 0;
 	}
@@ -242,14 +237,7 @@ void Display_Task()
 		Data_Deal_Cry();
 	}
 #else
-	if(Get_Display_Switch())
-	{
-		Data_Deal();
-	}
-	else
-	{
-		Data_Deal_Cry();
-	}
+	Data_Deal();
 #endif
 	
 }

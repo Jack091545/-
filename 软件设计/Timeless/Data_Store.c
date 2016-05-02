@@ -119,14 +119,7 @@ void IAP_Task(void)
 {
 
 #ifdef __DEBUG__
-	IAP_EraseSector(IAP_ADDRESS_SEC1); //擦除扇区1
-	Delay(10);
-	IAP_EraseSector(IAP_ADDRESS_SEC2); //擦除扇区2
-	Delay(10);
-	IAP_ProgramByte(IAP_ADDRESS_SEC1,0x55);
-	IAP_ProgramByte(IAP_ADDRESS_SEC1+1,0xAA);
-	Delay(10);
-#endif
+
 #ifdef __WEI__
 	IAP_EraseSector(IAP_ADDRESS_SEC1); //擦除扇区1
 	Delay(10);
@@ -136,15 +129,23 @@ void IAP_Task(void)
 	IAP_ProgramByte(IAP_ADDRESS_SEC1+1,0xAA);
 
 	IAP_ProgramByte(IAP_ADDRESS_SEC1+2,0x0A);
-	IAP_ProgramByte(IAP_ADDRESS_SEC1+3,0x3E);
+	IAP_ProgramByte(IAP_ADDRESS_SEC1+3,0x3D);
 	Delay(10);
 	SendByte_UART(IAP_ReadByte(IAP_ADDRESS_SEC1+2));
 	SendByte_UART(IAP_ReadByte(IAP_ADDRESS_SEC1+3));
 	SendByte_UART(IAP_ReadByte(IAP_ADDRESS_SEC1+2));
 	SendByte_UART(IAP_ReadByte(IAP_ADDRESS_SEC1+3));
-
+#else
+	IAP_EraseSector(IAP_ADDRESS_SEC1); //擦除扇区1
+	Delay(10);
+	IAP_EraseSector(IAP_ADDRESS_SEC2); //擦除扇区2
+	Delay(10);
+	IAP_ProgramByte(IAP_ADDRESS_SEC1,0x55);
+	IAP_ProgramByte(IAP_ADDRESS_SEC1+1,0xAA);
+	Delay(10);
 #endif
 
+#endif
 
 	if((IAP_ReadByte(IAP_ADDRESS_SEC1)!= 0x55) || (IAP_ReadByte(IAP_ADDRESS_SEC1+1) != 0xAA))	  //如果不是有效的，那么就擦除EEPROM上所有的数据，以防盗窃
 	{

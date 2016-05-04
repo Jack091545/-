@@ -36,9 +36,16 @@ void Process_Task(void)
 {
 	if(Get_Boot_Flag())
 	{
-		Update_Time_Task();
-		Read_Time_Task();		
-		Display_Task();
+		if(Get_Read_Time_Flag())
+		{
+			Read_Time_Task();
+		}	
+		else
+		{
+			Display_Task();
+			Update_Time_Task();		
+		}	
+
 	}
 	else
 	{

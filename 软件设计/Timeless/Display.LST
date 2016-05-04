@@ -1,4 +1,4 @@
-C51 COMPILER V9.00   DISPLAY                                                               05/02/2016 14:37:37 PAGE 1   
+C51 COMPILER V9.00   DISPLAY                                                               05/04/2016 23:15:48 PAGE 1   
 
 
 C51 COMPILER V9.00, COMPILATION OF MODULE DISPLAY
@@ -62,7 +62,7 @@ line level    source
   53          {0x6C,0xFE,0x92,0xFE,0x6C,0x00,0x00,0x00},/*"8",8*/
   54          
   55          {0x7C,0xFE,0x92,0xDE,0x4C,0x00,0x00,0x00}/*"9",9*/
-C51 COMPILER V9.00   DISPLAY                                                               05/02/2016 14:37:37 PAGE 2   
+C51 COMPILER V9.00   DISPLAY                                                               05/04/2016 23:15:48 PAGE 2   
 
   56          };
   57          
@@ -126,7 +126,7 @@ line level    source
  115          
  116          {0x00,0x00,0x00,0x64,0xF6,0x92,0xFE,0x7C},/*"6",6*/
  117          
-C51 COMPILER V9.00   DISPLAY                                                               05/02/2016 14:37:37 PAGE 3   
+C51 COMPILER V9.00   DISPLAY                                                               05/04/2016 23:15:48 PAGE 3   
 
  118          {0x00,0x00,0x00,0x0E,0x1E,0xF2,0xE6,0x06},/*"7",7*/
  119          
@@ -190,7 +190,7 @@ line level    source
  177   2                      SER=dat&0x80;
  178   2                      dat<<=1;
  179   2                      SRCLK=1;
-C51 COMPILER V9.00   DISPLAY                                                               05/02/2016 14:37:37 PAGE 4   
+C51 COMPILER V9.00   DISPLAY                                                               05/04/2016 23:15:48 PAGE 4   
 
  180   2              }
  181   1              LATCH=0;    //Ëø´æ
@@ -254,7 +254,7 @@ line level    source
  239   1              bai = (temp /100)%10 ;
  240   1              si =  (temp /10)%10     ;
  241   1              ge = temp %10    ;
-C51 COMPILER V9.00   DISPLAY                                                               05/02/2016 14:37:37 PAGE 5   
+C51 COMPILER V9.00   DISPLAY                                                               05/04/2016 23:15:48 PAGE 5   
 
  242   1              Send_Data(&lift_num[qian][0],&lift_num[bai][0],&lift_num[si][0],&lift_num[ge][0]);
  243   1      }
@@ -282,7 +282,7 @@ line level    source
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    802    ----
+   CODE SIZE        =    800    ----
    CONSTANT SIZE    =    400    ----
    XDATA SIZE       =     30      16
    PDATA SIZE       =   ----    ----

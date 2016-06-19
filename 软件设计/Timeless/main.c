@@ -22,7 +22,7 @@ void Init_Task(void)
 	UART_Init();
 	IAP_Task();
 	EA = 1;			
-	SendStr(" Timeless V2.0,Compiled about: ");
+	SendStr(" Timeless V2.1,Compiled about: ");
 	SendStr(__DATE__);
 	SendStr(",");
 	SendStr(__TIME__);

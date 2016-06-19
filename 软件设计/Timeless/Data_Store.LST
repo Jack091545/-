@@ -1,4 +1,4 @@
-C51 COMPILER V9.01   DATA_STORE                                                            06/19/2016 20:43:13 PAGE 1   
+C51 COMPILER V9.01   DATA_STORE                                                            06/19/2016 20:45:01 PAGE 1   
 
 
 C51 COMPILER V9.01, COMPILATION OF MODULE DATA_STORE
@@ -62,7 +62,7 @@ line level    source
   53          unsigned char IAP_ReadByte(unsigned int addr)
   54          {
   55   1              unsigned char dat;
-C51 COMPILER V9.01   DATA_STORE                                                            06/19/2016 20:43:13 PAGE 2   
+C51 COMPILER V9.01   DATA_STORE                                                            06/19/2016 20:45:01 PAGE 2   
 
   56   1      
   57   1              IAP_CONTR = ENABLE_IAP;
@@ -126,7 +126,7 @@ line level    source
  115           * 获取剩余天数
  116           */
  117          unsigned int Get_Timeless(void)
-C51 COMPILER V9.01   DATA_STORE                                                            06/19/2016 20:43:13 PAGE 3   
+C51 COMPILER V9.01   DATA_STORE                                                            06/19/2016 20:45:01 PAGE 3   
 
  118          {
  119   1              return (IAP_ReadByte(IAP_ADDRESS_SEC1+2)<<8)|(IAP_ReadByte(IAP_ADDRESS_SEC1+3)) ;
@@ -190,7 +190,7 @@ line level    source
  176   1              {
  177   2                      IAP_EraseSector(IAP_ADDRESS_SEC1); 
  178   2                      IAP_EraseSector(IAP_ADDRESS_SEC2); 
-C51 COMPILER V9.01   DATA_STORE                                                            06/19/2016 20:43:13 PAGE 4   
+C51 COMPILER V9.01   DATA_STORE                                                            06/19/2016 20:45:01 PAGE 4   
 
  179   2                      Boot_Flag = 0;          
  180   2              }

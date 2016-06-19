@@ -233,7 +233,7 @@ static void Data_Deal_Cry(void)
 	{
 		flag = 0;
 	}
-
+//	Set_Timeless(1988);
 	temp = Get_Timeless() ;
 	qian = (temp /1000)%10;
 	bai = (temp /100)%10 ;

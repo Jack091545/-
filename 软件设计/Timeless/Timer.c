@@ -27,6 +27,11 @@ unsigned char Get_Read_Time_Flag(void)
 	return Read_Time_Flag;
 }
 
+void Set_Read_Time_Flag(unsigned char i)
+{
+	Read_Time_Flag = i;
+}
+
 
 void Timer_Init(void)
 {														
@@ -64,7 +69,7 @@ void Timer0_SER(void) interrupt 1
 	} 
 	if(Timer_Counter2 == 2)/* 100ms */
 	{
-		Read_Time_Flag = 1;
+		Read_Time_Flag = 1;	 /* 100ms到了就去读一次时间 */
 	}
 	
 }

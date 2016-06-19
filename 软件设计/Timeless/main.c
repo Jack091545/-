@@ -39,13 +39,13 @@ void Process_Task(void)
 		if(Get_Read_Time_Flag())
 		{
 			Read_Time_Task();
+
 		}	
 		else
 		{
 			Display_Task();
 			Update_Time_Task();		
 		}	
-
 	}
 	else
 	{

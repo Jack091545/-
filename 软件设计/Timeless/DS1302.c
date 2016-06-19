@@ -1,5 +1,6 @@
 #include "stc12c5a60s2.h"
 #include "ds1302.h"
+#include "timer.h"
 #include<intrins.h>
 
 
@@ -213,6 +214,7 @@ void Ds1302_Init(void)
 void Read_Time_Task(void)
 {
 	Ds1302_Read_Time();
+	Set_Read_Time_Flag(0);	 /* 读取完成后将标志位清零 */
 }
 
 void Update_Time_Task(void)

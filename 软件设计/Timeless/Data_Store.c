@@ -150,11 +150,11 @@ void IAP_Task(void)
 	Delay(10);
 	IAP_EraseSector(IAP_ADDRESS_SEC2); 
 	Delay(10);
-	IAP_ProgramByte(IAP_ADDRESS_SEC1,0x55);
+	IAP_ProgramByte(IAP_ADDRESS_SEC1,0x55);			  /* 写入启动标志 */
 	IAP_ProgramByte(IAP_ADDRESS_SEC1+1,0xAA);
 
-	IAP_ProgramByte(IAP_ADDRESS_SEC1+2,0x0A);
-	IAP_ProgramByte(IAP_ADDRESS_SEC1+3,0x3D);
+	IAP_ProgramByte(IAP_ADDRESS_SEC1+2,0x07);		/* 写入Timeless */
+	IAP_ProgramByte(IAP_ADDRESS_SEC1+3,0xC4);
 	Delay(10);
 	SendByte_UART(IAP_ReadByte(IAP_ADDRESS_SEC1+2));
 	SendByte_UART(IAP_ReadByte(IAP_ADDRESS_SEC1+3));
